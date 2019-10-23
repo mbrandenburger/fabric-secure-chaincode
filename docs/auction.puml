@@ -1,0 +1,67 @@
+@startuml
+
+'- force wrapping of longer text
+'skinparam wrapWidth 400
+
+!pragma teoz true
+
+hide footbox
+title Foot Box removed
+
+title Elbonian Communications Commission Spectrum Auction
+actor "Elbonia\nCommunication\nCommission" as ECC
+actor "A-Telco" as A
+actor "B-Net" as B
+actor "C-Mobil" as C
+
+participant "Auction\nChaincode" as CC
+
+'participant "Ledger"
+
+ECC -> CC: Create auction with initial values
+
+ref over ECC, A, B, C, CC
+  Start phase 1
+end ref
+
+group round 1
+    ECC -> CC: Start round 1
+    A -> CC: submit bid
+    B -> CC: submit bid
+    C -> CC: submit bid
+    ECC -> CC: Close round 1
+    ECC -> CC: Evaluate round 1
+
+    A -> CC: query result round 1
+    return
+    B -> CC: query result round 1
+    return
+    C -> CC: query result round 1
+    return
+end
+
+group round 2
+    ECC -> CC: Start round 2
+    A -> CC: submit bid
+    B -> CC: submit bid
+    C -> CC: submit bid
+    ECC -> CC: Close round 2
+    ECC -> CC: Evaluate round 2
+
+    A -> CC: query result round 2
+    return
+    B -> CC: query result round 2
+    return
+    C -> CC: query result round 2
+    return
+end
+
+ref over ECC, A, B, C, CC
+  Start phase 2
+end ref
+
+group round 1
+    ECC -> CC: some other interaction
+end
+
+@enduml
