@@ -11,4 +11,3 @@ RUN npm install
 RUN npm install -g @vue/cli
 
 CMD ["npm", "run", "serve"]
-# CMD /bin/sh

@@ -2,23 +2,22 @@
 
 ## Project setup
 ```
-npm install
+make
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+make run
 ```
 
-### Compiles and minifies for production
+### Launch docker CLI
 ```
-npm run build
+make cli
 ```
 
-### Lints and fixes files
+### CLI commends 
+
+#### Lints and fixes files
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
