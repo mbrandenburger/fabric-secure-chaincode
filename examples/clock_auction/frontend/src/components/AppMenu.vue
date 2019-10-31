@@ -23,9 +23,10 @@
                 nav
         >
             <v-list-item
-                    v-for="item in items"
+                    v-for="item in menuItems"
                     :key="item.title"
                     link
+                    :to="item.link"
             >
                 <v-list-item-icon>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -53,14 +54,14 @@
         name: "BidderMenu",
         data () {
             return {
-                items: [
-                    { title: 'Place Bids', icon: 'fa-hammer' },
-                    { title: 'Bid Summary', icon: 'fa-list-alt' },
-                    { title: 'My Results', icon: 'fa-chart-line' },
-                    { title: 'Auction Info', icon: 'fa-info-circle' },
-                    { title: 'Auction Schedule', icon: 'fa-calendar' },
-                    { title: 'Settings', icon: 'fa-cog' },
-                    { title: 'Help', icon: 'fa-question-circle' },
+                menuItems: [
+                    { title: 'Place Bids', link: '/place_bid', icon: 'fa-hammer' },
+                    { title: 'Bid Summary', link: '', icon: 'fa-list-alt' },
+                    { title: 'My Results', link: '/my_results', icon: 'fa-chart-line' },
+                    { title: 'Auction Info', link: '/auction_info', icon: 'fa-info-circle' },
+                    { title: 'Auction Schedule', link: '', icon: 'fa-calendar' },
+                    { title: 'Settings', link: '', icon: 'fa-cog' },
+                    { title: 'Help', link: '', icon: 'fa-question-circle' },
                 ],
                 right: null,
             }

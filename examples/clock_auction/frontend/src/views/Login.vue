@@ -43,7 +43,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <router-link to="/Bidder">
+                                <router-link to="/auction_info">
                                     <v-btn color="primary">Login</v-btn>
                                 </router-link>
                             </v-card-actions>

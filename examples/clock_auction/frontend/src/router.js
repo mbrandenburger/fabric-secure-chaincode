@@ -2,12 +2,16 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Login from './views/Login'
-import Bidder from './views/BidderHome'
+import AuctionInfo from './views/AuctionInfo'
+import Results from './views/MyResults'
+import PlaceBid from './views/PlaceBid'
 
 Vue.use(VueRouter)
 
 const routes = [
-    { path: '/bidder', component: Bidder},
+    { path: '/auction_info', component: AuctionInfo},
+    { path: '/my_results', component: Results},
+    { path: '/place_bid', component: PlaceBid},
     { path: '/login', component: Login },
     { path: '/', component: Login },
     { path: '*', redirect: '/' }
