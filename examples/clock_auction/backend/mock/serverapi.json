@@ -1,0 +1,84 @@
+{
+  "auctions": [
+    {
+      "id": "2020",
+      "name": "Spectrum Auction 2020",
+      "owner": "Elbonian Communications Commission",
+      "clockPriceIncrease": "0.2",
+      "currentPhase": "1",
+      "currentRound": "20",
+      "participants": [
+        {"id": "A", "name": "A-Telecom", "eligibility": "10000"},
+        {"id": "B", "name": "B-Net", "eligibility": "10000"},
+        {"id": "C", "name": "C-Mobil", "eligibility": "10000"}
+      ],
+      "territories": [
+        {"id": "E", "name": "Elbograd", "population": 16000, "supply": 10, "biddingUnits": 1600, "quantity": 0, "openingPrice": 8000},
+        {"id": "M", "name": "Mudberg", "population":  14000, "supply": 8, "biddingUnits": 1760, "quantity": 0, "openingPrice": 7000},
+        {"id": "D", "name": "Deserton", "population":  6000, "supply": 8, "biddingUnits": 750, "quantity": 0, "openingPrice": 3000},
+        {"id": "P", "name": "Phlimsk", "population":  4000, "supply": 5, "biddingUnits": 800, "quantity": 0, "openingPrice": 2000}
+      ]
+    }
+  ],
+  "results": [
+    {
+      "round": "1",
+      "bids": [
+        {"territory": "Elbograd",
+          "supply": 10,
+          "aggDemand": 4,
+          "procesedBids": 3,
+          "postedPrice": 1000,
+          "clockPrice": 20000
+        }
+      ]
+    },
+    {"round": "2",
+      "bids": [
+        {"territory": "Elbograd",
+          "supply": 10,
+          "aggDemand": 4,
+          "procesedBids": 3,
+          "postedPrice": 1000,
+          "clockPrice": 20000
+        }
+      ]
+    },
+    {"round": "3",
+      "bids": [
+        {"territory": "Elbograd", "supply": 10,
+          "aggDemand": 4,
+          "procesedBids": 3,
+          "postedPrice": 1000,
+          "clockPrice": 20000
+        }
+      ]
+    }
+  ],
+  "territories": [
+    {"id": "E", "name": "Elbograd", "population": 16000},
+    {"id": "M", "name": "Mudberg", "population":  14000},
+    {"id": "D", "name": "Deserton", "population":  6000},
+    {"id": "P", "name": "Phlimsk", "population":  4000}
+  ],
+  "rounds": [
+    {
+      "auctionId": "2020",
+      "round": "20",
+      "status": "OPEN",
+      "minPrice": "200",
+      "clockPrice": "240"
+    }
+  ],
+  "clockBids": [
+    {"id": "Bid007", "auctionId": "2020", "round": "20", "bidderId": "A", "territoryId": "E", "quantity": "4", "price": "6000"}
+  ],
+  "assignmentBids": [
+    {"id": "Bid007", "auctionId": "2020", "round": "20", "bidderId": "A",
+      "package": [
+        {"licenseId": "someId", "price": "7000"},
+        {"licenseId": "someOtherId", "price": "7000"}
+      ]
+    }
+  ]
+}

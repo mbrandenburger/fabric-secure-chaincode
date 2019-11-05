@@ -10,10 +10,10 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-            <v-btn text>Phase {{auctionDetails.currentPhaseStatus}}</v-btn>
-            <v-btn text>Round {{auctionDetails.currentRoundNumber}}</v-btn>
+            <v-btn text>Phase {{auction.currentPhase}}</v-btn>
+            <v-btn text>Round {{auction.currentRound}}</v-btn>
             <v-btn text>Round ends: 1:49:33</v-btn>
-            <v-btn text>{{ new Date() }}</v-btn>
+            <v-btn text>{{ currentTime }}</v-btn>
         </v-toolbar-items>
 
     </v-app-bar>
@@ -21,25 +21,35 @@
 
 <script>
     import axios from 'axios';
+    import moment from 'moment';
 
     export default {
         name: "AuctionHeader",
         data: function () {
             return {
-                auctionDetails: null,
+                auction: null,
+                currentTime: null,
             }
         },
+        methods: {
+            updateCurrentTime() {
+                this.currentTime = moment().format('MM/DD/YYYY, h:mm:ss A z')
+            },
+        },
+        beforeDestroy () {
+            clearInterval(this.$options.interval);
+        },
         mounted () {
+            this.updateCurrentTime();
+            this.$options.interval = setInterval(this.updateCurrentTime, 1000);
             axios
-                .get('http://localhost:3000/getAuctionDetails')
+                .get('http://localhost:3000/auctions/2020')
                 .then(response => {
-                    this.auctionDetails = response.data
+                    this.auction = response.data
                 })
                 .catch(error => {
-                    alert ("error "+ error)
-                    this.errored = true
+                    alert ("error: " + error)
                 })
-                .finally(() => this.loading = false)
         }
     }
 </script>

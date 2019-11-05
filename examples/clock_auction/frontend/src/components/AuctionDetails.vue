@@ -2,12 +2,10 @@
     <div>
         <v-toolbar>
             <v-toolbar-title>Auction Info</v-toolbar-title>
-
             <v-spacer></v-spacer>
-
         </v-toolbar>
 
-        <v-container grid-list-xl fluid>
+        <v-container grid-list-xl fluid px-0>
             <v-layout row wrap>
                 <v-flex lg4 sm6 xs12>
                     <v-card>
@@ -15,8 +13,8 @@
                             <v-container class="pa-0">
                                 <div class="layout row ma-0">
                                     <div class="sm6 xs6 flex py-3" :class="color">
-                                        <div class="headline">{{ auctionDetails.auctionName }}</div>
-                                        <span class="caption">conducted by {{ auctionDetails.owner }}</span>
+                                        <div class="headline">{{ auction.name }}</div>
+                                        <span class="caption">conducted by {{ auction.owner }}</span>
                                     </div>
                                 </div>
                             </v-container>
@@ -35,7 +33,7 @@
                                     </div>
                                     <div class="sm6 xs6 flex text-sm-center py-3" :class="color">
                                         <div class="headline">Round</div>
-                                        <span class="caption">{{ auctionDetails.currentRoundNumber }}</span>
+                                        <span class="caption">{{ auction.currentRound }}</span>
                                     </div>
                                 </div>
                             </v-container>
@@ -54,7 +52,7 @@
                                     </div>
                                     <div class="sm6 xs6 flex text-sm-center py-3" :class="color">
                                         <div class="headline">Phase</div>
-                                        <span class="caption">{{ auctionDetails.currentPhaseStatus }}</span>
+                                        <span class="caption">{{ auction.currentPhase }}</span>
                                     </div>
                                 </div>
                             </v-container>
@@ -65,6 +63,7 @@
 
                 <v-flex lg4 sm6 xs12>
                     <v-card>
+                        <v-card-title>Auction participants</v-card-title>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <v-simple-table>
@@ -72,12 +71,14 @@
                                         <thead>
                                         <tr>
                                             <th class="text-left">Name</th>
+                                            <th class="text-left">Eligibility</th>
                                             <th class="text-left">Details</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="item in auctionDetails.bidders" :key="item.name">
+                                        <tr v-for="item in auction.participants" :key="item.name">
                                             <td>{{ item.name }}</td>
+                                            <td>{{ item.eligibility }}</td>
                                             <td> - </td>
                                         </tr>
                                         </tbody>
@@ -91,22 +92,25 @@
 
                 <v-flex lg4 sm6 xs12>
                     <v-card>
+                        <v-card-title>Territories</v-card-title>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <v-simple-table>
                                     <template v-slot:default>
                                         <thead>
                                         <tr>
-                                            <th class="text-left">Territory</th>
+                                            <th class="text-left">Name</th>
+                                            <th class="text-left">Population</th>
                                             <th class="text-left">Supply</th>
                                             <th class="text-left">Opening bidding price</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="item in auctionDetails.territories" :key="item.name">
+                                        <tr v-for="item in auction.territories" :key="item.name">
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item.numLicenses }}</td>
-                                            <td>{{ item.minimumPrice }}</td>
+                                            <td>{{ item.population }}</td>
+                                            <td>{{ item.supply }}</td>
+                                            <td>${{ item.openingPrice }}</td>
                                         </tr>
                                         </tbody>
                                     </template>
@@ -120,7 +124,7 @@
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
-                                {{ auctionDetails }}
+                                {{ auction }}
                             </v-container>
                         </v-card-text>
                     </v-card>
@@ -139,20 +143,18 @@
         props: ['dashboard'],
         data () {
             return {
-                auctionDetails: [],
+                auction: [],
             }
         },
         mounted () {
             axios
-                .get('http://localhost:3000/getAuctionDetails')
+                .get('http://localhost:3000/auctions/2020')
                 .then(response => {
-                    this.auctionDetails = response.data
+                    this.auction = response.data
                 })
                 .catch(error => {
                     alert ("error "+ error)
-                    this.errored = true
                 })
-                .finally(() => this.loading = false)
         }
     }
 </script>

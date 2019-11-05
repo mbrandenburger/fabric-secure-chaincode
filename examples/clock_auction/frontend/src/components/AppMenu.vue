@@ -59,7 +59,7 @@
                     { title: 'Bid Summary', link: '', icon: 'fa-list-alt' },
                     { title: 'My Results', link: '/my_results', icon: 'fa-chart-line' },
                     { title: 'Auction Info', link: '/auction_info', icon: 'fa-info-circle' },
-                    { title: 'Auction Schedule', link: '', icon: 'fa-calendar' },
+                    { title: 'Auction History', link: '', icon: 'fa-calendar' },
                     { title: 'Settings', link: '', icon: 'fa-cog' },
                     { title: 'Help', link: '', icon: 'fa-question-circle' },
                 ],

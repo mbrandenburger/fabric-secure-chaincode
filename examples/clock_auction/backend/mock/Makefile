@@ -5,7 +5,7 @@
 TOP = ../../../..
 include $(TOP)/build.mk
 
-DOCKER_IMAGE = auction_test_backend
+DOCKER_IMAGE = auction_mock_backend
 APP_SRC = ${PWD}
 
 build:
@@ -14,5 +14,6 @@ build:
 run:
 	$(DOCKER) run \
 		-it \
+		-v ${APP_SRC}:/usr/src/app \
 		-p 3000:3000 \
 		$(DOCKER_IMAGE)
