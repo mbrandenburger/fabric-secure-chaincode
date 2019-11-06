@@ -1,7 +1,7 @@
 // import axios from 'axios';
 
 const state = {
-    submittedBids: [],
+    submittedBids: []
 }
 
 const getters = {
@@ -14,8 +14,11 @@ const actions = {
 }
 
 const mutations = {
-    pushBid (state, bid ) {
-        state.submittedBids.push(bid)
+    pushBid (state, payload) {
+
+        var newBid = payload
+
+        state.submittedBids.push(newBid)
     },
 }
 

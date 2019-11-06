@@ -45,11 +45,22 @@
         <v-row>
             <v-col cols="12">
                 <v-card>
-                    <v-card-title>Build your bid</v-card-title>
+                    <v-card-title>
+                        Build your bid
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                                v-model="search"
+                                append-icon="fa-search"
+                                label="Search"
+                                single-line
+                                hide-details
+                        ></v-text-field>
+                    </v-card-title>
                     <v-card-text class="pa-0">
                         <v-data-table v-if="auction.currentRound === 1"
                                       :headers="tableHeader"
                                       :items="territories"
+                                      :search="search"
                                       hide-default-footer
                         >
                             <template v-slot:item.openingPrice="props">
@@ -83,6 +94,7 @@
                         <v-data-table v-else
                                       :headers="tableHeader"
                                       :items="territories"
+                                      :search="search"
                                       hide-default-footer
                         >
                             <template v-slot:item.openingPrice="props">
@@ -128,16 +140,11 @@
     import { mapState } from 'vuex'
     import axios from 'axios';
 
-    const EMPTY_BID = {
-        id: null,
-        round: 0,
-        licences: []
-    }
-
     export default {
         name: 'Dashboard',
         data () {
             return {
+                search: '',
                 territories: [],
                 totalCommitment: 0,
                 eligibility: 0,
@@ -195,8 +202,12 @@
             },
             submitBid: function () {
 
-                var bid = EMPTY_BID
-                bid.round = this.auction.currentRound
+                var bid = {
+                    id: "bla",
+                    round: this.auction.currentRound,
+                    licences: [],
+                    status: "submitted"
+                }
 
                 for (var i=0; i < this.territories.length;i++) {
                     if (Number(this.territories[i].quantity) > 0) {
@@ -206,7 +217,6 @@
                             quantity: Number(this.territories[i].quantity)
                         })
                     }
-
                 }
 
                 this.$store.dispatch('bid/submitBid', bid)
