@@ -1,8 +1,8 @@
 <template>
     <v-navigation-drawer
+            :clipped=true
+            :dark=true
             permanent
-            clipped="true"
-            :dark="true"
             app
     >
         <v-list-item>
@@ -56,7 +56,7 @@
             return {
                 menuItems: [
                     { title: 'Place Bids', link: '/place_bid', icon: 'fa-hammer' },
-                    { title: 'Bid Summary', link: '', icon: 'fa-list-alt' },
+                    { title: 'Bid Summary', link: 'bid_summary', icon: 'fa-list-alt' },
                     { title: 'My Results', link: '/my_results', icon: 'fa-chart-line' },
                     { title: 'Auction Info', link: '/auction_info', icon: 'fa-info-circle' },
                     { title: 'Auction History', link: '', icon: 'fa-calendar' },

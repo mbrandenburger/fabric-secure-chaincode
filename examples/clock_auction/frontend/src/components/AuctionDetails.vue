@@ -110,7 +110,7 @@
                                             <td>{{ item.name }}</td>
                                             <td>{{ item.population }}</td>
                                             <td>{{ item.supply }}</td>
-                                            <td>${{ item.openingPrice }}</td>
+                                            <td>$ {{ item.openingPrice }}</td>
                                         </tr>
                                         </tbody>
                                     </template>
@@ -136,25 +136,15 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import { mapState } from 'vuex'
 
     export default {
-        name: 'Dashboard',
-        props: ['dashboard'],
-        data () {
-            return {
-                auction: [],
-            }
-        },
+        name: 'AuctionDetails',
+        computed: mapState({
+            auction: state => state.auction.auction
+        }),
         mounted () {
-            axios
-                .get('http://localhost:3000/auctions/2020')
-                .then(response => {
-                    this.auction = response.data
-                })
-                .catch(error => {
-                    alert ("error "+ error)
-                })
+
         }
     }
 </script>

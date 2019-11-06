@@ -2,15 +2,18 @@
     <div>
         <AuctionHeader></AuctionHeader>
         <BidderMenu></BidderMenu>
-        <PlaceBidTable></PlaceBidTable>
+        <ClockBidding v-if="auction.currentPhase === 1"></ClockBidding>
+        <AssignmentBidding v-else></AssignmentBidding>
     </div>
 </template>
 
 <script>
 
-    import AuctionHeader from "../components/AppHeader";
+    import { mapState } from 'vuex'
+    import AuctionHeader from "../components/AppHeader"
     import BidderMenu from '../components/AppMenu'
-    import PlaceBidTable from "../components/PlaceBidTable";
+    import ClockBidding from '../components/Bidding/ClockBidding'
+    import AssignmentBidding from '../components/Bidding/AssignmentBidding'
 
     export default {
 
@@ -18,7 +21,11 @@
         components: {
             AuctionHeader,
             BidderMenu,
-            PlaceBidTable, // this is our current default view
-        }
+            ClockBidding,
+            AssignmentBidding,
+        },
+        computed: mapState({
+            auction: state => state.auction.auction
+        })
     }
 </script>
