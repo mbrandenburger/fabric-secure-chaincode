@@ -8,23 +8,79 @@
       "currentPhase": 1,
       "currentRound": 1,
       "participants": [
-        {"id": "A", "name": "A-Telecom", "eligibility": 10000},
-        {"id": "B", "name": "B-Net", "eligibility": 10000},
-        {"id": "C", "name": "C-Mobil", "eligibility": 10000}
+        {
+          "id": "A",
+          "name": "A-Telecom",
+          "eligibility": 10000
+        },
+        {
+          "id": "B",
+          "name": "B-Net",
+          "eligibility": 10000
+        },
+        {
+          "id": "C",
+          "name": "C-Mobil",
+          "eligibility": 10000
+        }
       ],
       "territories": [
-        {"id": "E", "name": "Elbograd", "population": 16000, "supply": 10, "biddingUnits": 1600, "quantity": 0, "openingPrice": 8000},
-        {"id": "M", "name": "Mudberg", "population":  14000, "supply": 8, "biddingUnits": 1760, "quantity": 0, "openingPrice": 7000},
-        {"id": "D", "name": "Deserton", "population":  6000, "supply": 8, "biddingUnits": 750, "quantity": 0, "openingPrice": 3000},
-        {"id": "P", "name": "Phlimsk", "population":  4000, "supply": 5, "biddingUnits": 800, "quantity": 0, "openingPrice": 2000}
+        {
+          "id": "E",
+          "name": "Elbograd",
+          "population": 16000,
+          "supply": 10,
+          "quantity": 0,
+          "openingPrice": 8000
+        },
+        {
+          "id": "M",
+          "name": "Mudberg",
+          "population": 14000,
+          "supply": 8,
+          "quantity": 0,
+          "openingPrice": 7000
+        },
+        {
+          "id": "D",
+          "name": "Deserton",
+          "population": 6000,
+          "supply": 8,
+          "quantity": 0,
+          "openingPrice": 3000
+        },
+        {
+          "id": "P",
+          "name": "Phlimsk",
+          "population": 4000,
+          "supply": 5,
+          "quantity": 0,
+          "openingPrice": 2000
+        }
       ]
     }
   ],
+
+  "auctionStatus": [
+    {
+      "id": 1,
+      "status": {
+        "rc": 0,
+        "msg": "Some message"
+      },
+      "state": "CLOCK",
+      "round": 2,
+      "roundActive": false}
+  ],
+
+
+
   "results": [
     {
       "round": "1",
       "bids": [
-        {"territory": "Elbograd",
+        {
+          "territory": "Elbograd",
           "supply": 10,
           "aggDemand": 4,
           "procesedBids": 3,
@@ -33,9 +89,11 @@
         }
       ]
     },
-    {"round": "2",
+    {
+      "round": "2",
       "bids": [
-        {"territory": "Elbograd",
+        {
+          "territory": "Elbograd",
           "supply": 10,
           "aggDemand": 4,
           "procesedBids": 3,
@@ -44,9 +102,12 @@
         }
       ]
     },
-    {"round": "3",
+    {
+      "round": "3",
       "bids": [
-        {"territory": "Elbograd", "supply": 10,
+        {
+          "territory": "Elbograd",
+          "supply": 10,
           "aggDemand": 4,
           "procesedBids": 3,
           "postedPrice": 1000,
@@ -56,28 +117,130 @@
     }
   ],
   "territories": [
-    {"id": "E", "name": "Elbograd", "population": 16000},
-    {"id": "M", "name": "Mudberg", "population":  14000},
-    {"id": "D", "name": "Deserton", "population":  6000},
-    {"id": "P", "name": "Phlimsk", "population":  4000}
-  ],
-  "rounds": [
     {
-      "auctionId": "2020",
-      "round": 20,
-      "status": "OPEN",
-      "minPrice": 200,
-      "clockPrice": 240
+      "id": "E",
+      "name": "Elbograd",
+      "population": 16000
+    },
+    {
+      "id": "M",
+      "name": "Mudberg",
+      "population": 14000
+    },
+    {
+      "id": "D",
+      "name": "Deserton",
+      "population": 6000
+    },
+    {
+      "id": "P",
+      "name": "Phlimsk",
+      "population": 4000
     }
   ],
+
+
+  "clock_rounds": [
+    {
+      "id": 1,
+      "auctionId": "2020",
+      "status": "OPEN",
+      "territories": [
+        {
+          "name": "Elbograd",
+          "supply": 10,
+          "minPrice": 8000,
+          "price": 8000,
+          "quantity": 0
+        },
+        {
+          "name": "Mudberg",
+          "supply": 8,
+          "minPrice": 7000,
+          "price": 7000,
+          "quantity": 0
+        },
+        {
+          "name": "Deserton",
+          "supply": 8,
+          "minPrice": 3000,
+          "price": 3000,
+          "quantity": 0
+        },
+        {
+          "name": "Phlimsk",
+          "supply": 5,
+          "minPrice": 2000,
+          "price": 2000,
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "auctionId": "2020",
+      "status": "OPEN",
+      "territories": [
+        {
+          "name": "Elbograd",
+          "supply": 10,
+          "demand": 14,
+          "minPrice": 8000,
+          "clockPrice": 10000,
+          "price": 10000,
+          "quantity": 0
+        },
+        {
+          "name": "Mudberg",
+          "supply": 8,
+          "demand": 14,
+          "minPrice": 7000,
+          "clockPrice": 8000,
+          "price": 8000,
+          "quantity": 0
+        },
+        {
+          "name": "Deserton",
+          "supply": 8,
+          "demand": 14,
+          "minPrice": 3000,
+          "clockPrice": 4000,
+          "price": 4000,
+          "quantity": 0
+        },
+        {
+          "name": "Phlimsk",
+          "supply": 5,
+          "demand": 14,
+          "minPrice": 2000,
+          "clockPrice": 3000,
+          "price": 3000,
+          "quantity": 0
+        }
+      ]
+    }
+  ],
+
+
+
   "clockBids": [
     {"id": "Bid007", "auctionId": "2020", "round": 20, "bidderId": "A", "territoryId": "E", "quantity": 4, "price": 6000}
   ],
   "assignmentBids": [
-    {"id": "Bid007", "auctionId": "2020", "round": 20, "bidderId": "A",
+    {
+      "id": "Bid007",
+      "auctionId": "2020",
+      "round": 20,
+      "bidderId": "A",
       "package": [
-        {"licenseId": "someId", "price": 7000},
-        {"licenseId": "someOtherId", "price": 7000}
+        {
+          "licenseId": "someId",
+          "price": 7000
+        },
+        {
+          "licenseId": "someOtherId",
+          "price": 7000
+        }
       ]
     }
   ]

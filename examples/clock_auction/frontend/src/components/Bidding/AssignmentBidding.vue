@@ -1,62 +1,156 @@
 <template>
-    <div>
+    <v-container fluid>
+        <v-row>
+            <v-col cols="12">Assignment Bidding</v-col>
+        </v-row>
 
-        <v-card
-                class="mx-auto"
-        >
-            <v-card-title>
-                Assignment Bidding
-            </v-card-title>
+        <v-row>
+            <v-col cols="12">
+                <v-card
+                        class="mx-auto"
+                >
+                    <v-tabs
+                            v-model="tab"
+                            background-color="orange darken-3"
+                            dark
+                            text
+                    >
 
-            <v-list-item two-line
-                         v-for="territory in territories"
-                         v-bind:key="territory.name"
-                         class="px-2 pb-2 ma-2"
-                         justify="space-between"
-            >
-                <v-list-item-content>
-                    <v-list-item-title> {{ territory.name }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                        <v-simple-table>
-                            <template v-slot:default>
-                                <thead>
-                                <tr>
-                                    <th class="text-left">Impairment Adjusted Price</th>
-                                    <th class="text-left">Channels</th>
-                                    <th class="text-left">Status</th>
-                                    <th class="text-left">Price</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="options in generateOptions(territory.licences, territory.blocks)" :key="options.price">
-                                    <td>$ 0</td>
-                                    <td>
-                                        <v-btn-toggle
-                                                v-model="options.channels"
-                                                multiple
-                                        >
-                                            <v-btn
-                                                    v-for="(item, index) in territory.licences"
-                                                    v-bind:key="item.name"
-                                                    color="primary"
-                                                    disabled
+                        <v-tab
+                                v-for="territory in territories"
+                                :key="territory"
+                                :href="`#tab-${territory.name}`"
+                        >
+                            {{ territory.name }}
+                        </v-tab>
+
+                        <v-tab-item
+                                v-for="territory in territories"
+                                :key="territory"
+                                :value="'tab-' + territory.name"
+                        >
+
+                            <v-simple-table>
+                                <template v-slot:default>
+                                    <thead>
+                                    <tr>
+                                        <th class="text-left">Impairment Adjusted Price</th>
+                                        <th class="text-left">Channels</th>
+                                        <th class="text-left">Status</th>
+                                        <th class="text-left">Bid Price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="options in generateOptions(territory.clockPrice, territory.channels, territory.licenses)" :key="options.price">
+                                        <td>$ {{ options.price }}</td>
+                                        <td>
+                                            <v-btn-toggle
+                                                    v-model="options.channels"
+                                                    multiple
                                             >
-                                                {{ letters[index] }}
-                                            </v-btn>
-                                        </v-btn-toggle>
-                                    </td>
-                                    <td> status </td>
-                                    <td>$ {{ options.price }}</td>
-                                </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table>
-                    </v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-        </v-card>
+                                                <v-btn
+                                                        v-for="(item, index) in territory.channels"
+                                                        v-bind:key="item.name"
+                                                        color="primary"
+                                                        disabled
+                                                >
+                                                    {{ letters[index] }}
+                                                </v-btn>
+                                            </v-btn-toggle>
+                                        </td>
+                                        <td> status </td>
+                                        <td>
+                                            <v-edit-dialog
+                                                    :return-value.sync="options.price"
+                                                    large
+                                                    persistent
+                                                    @save="save"
+                                            >
+                                                <div>$ {{ options.price }}</div>
+                                                <template v-slot:input>
+                                                    <div class="mt-4 title">Update quantity</div>
+                                                </template>
+                                                <template v-slot:input>
+                                                    <v-text-field
+                                                            v-model="options.price"
+                                                            type="number"
+                                                            :rules="[q => q >= options.price || 'Invalid quantity']"
+                                                            label="Edit"
+                                                            single-line
+                                                            autofocus
+                                                    ></v-text-field>
+                                                </template>
+                                            </v-edit-dialog>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                        </v-tab-item>
+                    </v-tabs>
+                </v-card>
+            </v-col>
+        </v-row>
 
-    </div>
+        <v-row>
+            <v-col cols="12" right>
+                <div class="d-flex justify-end">
+                    <v-btn color="primary" @click="prepareBid">Submit your bid</v-btn>
+                </div>
+            </v-col>
+        </v-row>
+
+        <v-overlay :value="waitingOverlay">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
+
+        <v-dialog
+                v-model="confirmDialog"
+                max-width="400"
+        >
+            <v-card>
+                <v-card-title class="headline">Confirm your assignment bid</v-card-title>
+                <v-card-text>
+                    <v-simple-table>
+                        <template v-slot:default>
+                            <thead>
+                            <tr>
+                                <th class="text-left">Territory</th>
+                                <th class="text-left">Channels</th>
+                                <th class="text-left">Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="license in currentBid.licences" :key="license.territory">
+                                <td>{{ license.territory}}</td>
+                                <td>$ {{ license.price }}</td>
+                                <td>{{ license.quantity }}</td>
+                            </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="red darken-1"
+                            text
+                            @click="confirmDialog = false"
+                    >
+                        Cancel
+                    </v-btn>
+                    <v-btn
+                            color="green darken-1"
+                            text
+                            @click="submitBid"
+                    >
+                        Submit
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+    </v-container>
 </template>
 
 <script>
@@ -68,12 +162,15 @@
             return {
                 search: '',
                 letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+                tab: null,
+                confirmDialog: false,
+                waitingOverlay: false,
                 territories: [
                     {
                         name: "Elbograd",
-                        blocks: 4,
-                        clockPrce: 10000,
-                        licences: [
+                        licenses: 4,
+                        clockPrice: 10000,
+                        channels: [
                             { impariment: 0 },
                             { impariment: 0 },
                             { impariment: 0 },
@@ -88,9 +185,9 @@
                     },
                     {
                         name: "Mudberg",
-                        blocks: 2,
-                        clockPrce: 10000,
-                        licences: [
+                        licenses: 2,
+                        clockPrice: 10000,
+                        channels: [
                             { impariment: 0 },
                             { impariment: 0 },
                             { impariment: 0 },
@@ -103,9 +200,9 @@
                     },
                     {
                         name: "Deserton",
-                        blocks: 3,
-                        clockPrce: 10000,
-                        licences: [
+                        licenses: 3,
+                        clockPrice: 10000,
+                        channels: [
                             { impariment: 0 },
                             { impariment: 0 },
                             { impariment: 0 },
@@ -118,9 +215,9 @@
                     },
                     {
                         name: "Phlimsk",
-                        blocks: 2,
-                        clockPrce: 10000,
-                        licences: [
+                        licenses: 2,
+                        clockPrice: 10000,
+                        channels: [
                             { impariment: 0 },
                             { impariment: 0 },
                             { impariment: 0 },
@@ -136,21 +233,49 @@
             }
         },
         methods: {
-            generateOptions: function(licenses, blocks) {
-                const numLicenses = licenses.length
+            generateOptions: function(channelPrice, channels, wonChannels) {
+                const numChannels = channels.length
                 let options = []
-                for (let i = 0; i <= numLicenses-blocks; i++) {
+                for (let i = 0; i <= numChannels-wonChannels; i++) {
                     let chs = []
-                    for (let j = i; j < i + blocks; j++) {
+                    let price = 0
+                    for (let j = i; j < i + wonChannels; j++) {
+                        price += channelPrice * (100 - channels[j].impariment) / 100
                         chs.push(j)
                     }
                     options.push({
-                        price: 0,
+                        price: price,
                         channels: chs,
                     })
                 }
 
                 return options
+            },
+            prepareBid: function() {
+                this.currentBid = {
+                    id: "bla",
+                    licences: [],
+                    status: "submitted"
+                }
+
+                for (let i=0; i < this.territories.length; i++) {
+                    if (Number(this.territories[i].quantity) > 0) {
+                        this.currentBid.licences.push({
+                            territory: this.territories[i].name,
+                            price:  Number(this.territories[i].openingPrice),
+                            quantity: Number(this.territories[i].quantity)
+                        })
+                    }
+                }
+                this.confirmDialog = true
+            },
+            submitBid: function () {
+                this.confirmDialog = false
+                this.waitingOverlay = true
+                this.$store.dispatch('bid/submitBid', this.bid)
+                    .then(() => {
+                        this.currentBid = null
+                    })
             }
         },
         mounted () {

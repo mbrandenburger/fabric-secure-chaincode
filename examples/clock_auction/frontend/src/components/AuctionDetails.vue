@@ -12,7 +12,7 @@
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <div class="layout row ma-0">
-                                    <div class="sm6 xs6 flex py-3" :class="color">
+                                    <div class="sm6 xs6 flex py-3">
                                         <div class="headline">{{ auction.name }}</div>
                                         <span class="caption">conducted by {{ auction.owner }}</span>
                                     </div>
@@ -28,10 +28,10 @@
                                 <div class="layout row ma-0">
                                     <div class="sm6 xs6 flex">
                                         <div class="layout column ma-0 justify-center align-center">
-                                            <v-icon size="56px" :color="color">fa-hashtag</v-icon>
+                                            <v-icon size="56px">fa-hashtag</v-icon>
                                         </div>
                                     </div>
-                                    <div class="sm6 xs6 flex text-sm-center py-3" :class="color">
+                                    <div class="sm6 xs6 flex text-sm-center py-3">
                                         <div class="headline">Round</div>
                                         <span class="caption">{{ auction.currentRound }}</span>
                                     </div>
@@ -47,10 +47,10 @@
                                 <div class="layout row ma-0">
                                     <div class="sm6 xs6 flex">
                                         <div class="layout column ma-0 justify-center align-center">
-                                            <v-icon size="56px" :color="color">fa-hashtag</v-icon>
+                                            <v-icon size="56px">fa-hashtag</v-icon>
                                         </div>
                                     </div>
-                                    <div class="sm6 xs6 flex text-sm-center py-3" :class="color">
+                                    <div class="sm6 xs6 flex text-sm-center py-3">
                                         <div class="headline">Phase</div>
                                         <span class="caption">{{ auction.currentPhase }}</span>
                                     </div>

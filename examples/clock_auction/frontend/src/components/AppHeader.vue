@@ -43,7 +43,7 @@
                 </template>
                 <v-list>
                     <v-list-item
-                            v-for="index in 6"
+                            v-for="index in 3"
                             :key="index"
                             @click="UPDATE_CURRENT_ROUND(index)"
                     >
