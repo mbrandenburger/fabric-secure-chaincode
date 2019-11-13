@@ -1,10 +1,11 @@
 <template>
-    <v-container fluid>
+    <div>
         <v-row>
             <v-col cols="12">Clock Bidding</v-col>
         </v-row>
-        <v-row>
-            <v-col cols="3">
+        <v-container grid-list-xl fluid px-0>
+          <v-layout row wrap>
+            <v-flex lg3 sm6 xs12>
                 <v-card dark>
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
@@ -13,8 +14,9 @@
                         </div>
                     </div>
                 </v-card>
-            </v-col>
-            <v-col cols="3">
+            </v-flex>
+
+            <v-flex lg3 sm6 xs12>
                 <v-card dark >
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
@@ -23,8 +25,9 @@
                         </div>
                     </div>
                 </v-card>
-            </v-col>
-            <v-col cols="3">
+            </v-flex>
+
+            <v-flex lg3 sm6 xs12>
                 <v-card dark >
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
@@ -33,8 +36,9 @@
                         </div>
                     </div>
                 </v-card>
-            </v-col>
-            <v-col cols="3">
+            </v-flex>
+
+            <v-flex lg3 sm6 xs12>
                 <v-card dark >
                     <div class="d-flex flex-no-wrap justify-space-between">
                         <div>
@@ -43,9 +47,9 @@
                         </div>
                     </div>
                 </v-card>
-            </v-col>
-        </v-row>
-
+            </v-flex>
+          </v-layout>
+        </v-container>
         <v-row>
             <v-col cols="12">
                 <v-card>
@@ -170,7 +174,6 @@
             </v-col>
         </v-row>
 
-
         <v-overlay :value="waitingOverlay">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
@@ -192,7 +195,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="license in currentBid.licences" :key="license.territory">
+                            <tr v-for="license in currentBid.licenses" :key="license.territory">
                                 <td>{{ license.territory}}</td>
                                 <td>$ {{ license.price }}</td>
                                 <td>{{ license.quantity }}</td>
@@ -220,8 +223,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
-    </v-container>
+    </div>
 </template>
 
 <script>
@@ -284,9 +286,9 @@
                     this.territories = response.data.territories
                     this.eligibility = response.data.participants[0].eligibility
                     this.requiredActivity = response.data.participants[0].eligibility * 0.8
-                })
-                .catch(error => {
-                    alert ("error "+ error)
+                //})
+                //.catch(error => {
+                //    alert ("error "+ error)
                 }).finally(
                     this.waitingOverlay = false
                 )
@@ -297,7 +299,7 @@
                 this.requestedActivity = 0
                 for (let i=0; i<this.territories.length; i++) {
                     this.totalCommitment += Number(this.territories[i].quantity) * Number(this.territories[i].minPrice)
-                    this.requestedActivity += Number(this.territories[i].quantity) * Number(this.territories[i].biddingUnits)
+                    this.requestedActivity += Number(this.territories[i].quantity)
                 }
             },
 
@@ -305,13 +307,13 @@
                 this.currentBid = {
                     id: "bla",
                     round: this.auction.currentRound,
-                    licences: [],
+                    licenses: [],
                     status: "submitted"
                 }
 
                 for (let i=0; i < this.territories.length; i++) {
                     if (Number(this.territories[i].quantity) > 0) {
-                        this.currentBid.licences.push({
+                        this.currentBid.licenses.push({
                             territory: this.territories[i].name,
                             price:  Number(this.territories[i].price),
                             quantity: Number(this.territories[i].quantity)

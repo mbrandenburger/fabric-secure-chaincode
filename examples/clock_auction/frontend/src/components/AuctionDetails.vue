@@ -1,18 +1,17 @@
 <template>
     <div>
-        <v-toolbar>
-            <v-toolbar-title>Auction Info</v-toolbar-title>
-            <v-spacer></v-spacer>
-        </v-toolbar>
+        <v-row>
+            <v-col cols="12">Auction Info</v-col>
+        </v-row>
 
         <v-container grid-list-xl fluid px-0>
             <v-layout row wrap>
-                <v-flex lg4 sm6 xs12>
+                <v-flex lg10 sm6 xs12>
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <div class="layout row ma-0">
-                                    <div class="sm6 xs6 flex py-3">
+                                    <div class="sm12 xs6 flex py-3">
                                         <div class="headline">{{ auction.name }}</div>
                                         <span class="caption">conducted by {{ auction.owner }}</span>
                                     </div>
@@ -21,19 +20,14 @@
                         </v-card-text>
                     </v-card>
                 </v-flex>
-                <v-flex lg2 sm6 xs12>
+                <!--<v-flex lg2 sm6 xs12>
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <div class="layout row ma-0">
-                                    <div class="sm6 xs6 flex">
-                                        <div class="layout column ma-0 justify-center align-center">
-                                            <v-icon size="56px">fa-hashtag</v-icon>
-                                        </div>
-                                    </div>
-                                    <div class="sm6 xs6 flex text-sm-center py-3">
+                                    <div class="sm12 xs12 flex text-sm-center py-3" :class="color">
                                         <div class="headline">Round</div>
-                                        <span class="caption">{{ auction.currentRound }}</span>
+                                        <span class="headline">{{ auction.currentRound }}</span>
                                     </div>
                                 </div>
                             </v-container>
@@ -45,21 +39,16 @@
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
                                 <div class="layout row ma-0">
-                                    <div class="sm6 xs6 flex">
-                                        <div class="layout column ma-0 justify-center align-center">
-                                            <v-icon size="56px">fa-hashtag</v-icon>
-                                        </div>
-                                    </div>
-                                    <div class="sm6 xs6 flex text-sm-center py-3">
+                                  <div class="sm6 xs6 flex text-sm-center py-3">
+                                    <div class="sm12 xs12 flex text-sm-center py-3" :class="color">
                                         <div class="headline">Phase</div>
-                                        <span class="caption">{{ auction.currentPhase }}</span>
+                                        <span class="headline">{{ auction.currentPhase }}</span>
                                     </div>
                                 </div>
                             </v-container>
                         </v-card-text>
                     </v-card>
-                </v-flex>
-
+                </v-flex>-->
 
                 <v-flex lg4 sm6 xs12>
                     <v-card>
@@ -72,14 +61,14 @@
                                         <tr>
                                             <th class="text-left">Name</th>
                                             <th class="text-left">Eligibility</th>
-                                            <th class="text-left">Details</th>
+                                            <th class="text-left">Id</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="item in auction.participants" :key="item.name">
                                             <td>{{ item.name }}</td>
                                             <td>{{ item.eligibility }}</td>
-                                            <td> - </td>
+                                            <td>{{ item.id }}</td>
                                         </tr>
                                         </tbody>
                                     </template>
@@ -90,7 +79,7 @@
                 </v-flex>
 
 
-                <v-flex lg4 sm6 xs12>
+                <v-flex lg6 sm6 xs12>
                     <v-card>
                         <v-card-title>Territories</v-card-title>
                         <v-card-text class="pa-0">
@@ -120,7 +109,7 @@
                     </v-card>
                 </v-flex>
 
-                <v-flex lg12 sm6 xs12>
+                <v-flex lg10 sm6 xs12>
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
@@ -131,7 +120,6 @@
                 </v-flex>
             </v-layout>
         </v-container>
-
     </div>
 </template>
 
@@ -144,7 +132,6 @@
             auction: state => state.auction.auction
         }),
         mounted () {
-
         }
     }
 </script>

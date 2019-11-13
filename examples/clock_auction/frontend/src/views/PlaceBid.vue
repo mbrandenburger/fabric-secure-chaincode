@@ -2,7 +2,7 @@
     <div>
         <AuctionHeader></AuctionHeader>
         <BidderMenu></BidderMenu>
-        <ClockBidding v-if="auction.currentPhase === 1"></ClockBidding>
+        <ClockBidding v-if="auction.currentPhase === 1">currentPhase=={{auction.currentPhase}}</ClockBidding>
         <AssignmentBidding v-else></AssignmentBidding>
     </div>
 </template>

@@ -1,10 +1,8 @@
 <template>
     <div>
-        <v-toolbar>
-            <v-toolbar-title>My Results</v-toolbar-title>
-            <v-spacer></v-spacer>
-
-        </v-toolbar>
+        <v-row>
+            <v-col cols="12">My Results</v-col>
+        </v-row>
 
         <v-data-table
                 :headers="headers"
