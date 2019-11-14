@@ -4,7 +4,6 @@
             <v-col cols="12">My Bid Summary</v-col>
         </v-row>
         <v-card>
-            <!--<v-card-title>My Bid Summary</v-card-title>-->
             <v-card-text class="pa-0">
                 <v-data-table
                         :headers="tableHeader"

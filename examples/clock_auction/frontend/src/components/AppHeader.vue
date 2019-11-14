@@ -31,7 +31,7 @@
                 </v-list>
             </v-menu>
 
-            <v-menu offset-y>
+            <v-menu offset-y v-if="auction.currentPhase === 1">
                 <template v-slot:activator="{ on }">
                     <v-btn
                             color="secondary"

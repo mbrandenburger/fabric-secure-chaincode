@@ -1,9 +1,16 @@
 <template>
     <div>
-        <AuctionHeader></AuctionHeader>
-        <BidderMenu></BidderMenu>
-        <ClockBidding v-if="auction.currentPhase === 1">currentPhase=={{auction.currentPhase}}</ClockBidding>
-        <AssignmentBidding v-else></AssignmentBidding>
+        <template v-if="auction===null">
+            <v-overlay :value="true">
+                <v-progress-circular indeterminate size="64"></v-progress-circular>
+            </v-overlay>
+        </template>
+        <template v-else>
+            <AuctionHeader></AuctionHeader>
+            <BidderMenu></BidderMenu>
+            <ClockBidding v-if="auction.currentPhase === 1">currentPhase=={{auction.currentPhase}}</ClockBidding>
+            <AssignmentBidding v-else></AssignmentBidding>
+        </template>
     </div>
 </template>
 

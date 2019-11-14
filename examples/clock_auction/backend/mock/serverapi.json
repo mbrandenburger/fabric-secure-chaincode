@@ -221,7 +221,143 @@
     }
   ],
 
-
+  "assignment": {
+    "territories": [
+      {
+        "name": "Elbograd",
+        "licenses": 4,
+        "clockPrice": 10000,
+        "channels": [
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 10
+          },
+          {
+            "impairment": 10
+          },
+          {
+            "impairment": 0
+          }
+        ]
+      },
+      {
+        "name": "Mudberg",
+        "licenses": 4,
+        "clockPrice": 10000,
+        "channels": [
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          }
+        ]
+      },
+      {
+        "name": "Deserton",
+        "licenses": 3,
+        "clockPrice": 10000,
+        "channels": [
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 10
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          }
+        ]
+      },
+      {
+        "name": "Phlimsk",
+        "licenses": 2,
+        "clockPrice": 10000,
+        "channels": [
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 0
+          },
+          {
+            "impairment": 10
+          },
+          {
+            "impairment": 0
+          }
+        ]
+      }
+    ]
+  },
 
   "clockBids": [
     {"id": "Bid007", "auctionId": "2020", "round": 20, "bidderId": "A", "territoryId": "E", "quantity": 4, "price": 6000}

@@ -6,7 +6,7 @@
 
         <v-container grid-list-xl fluid px-0>
             <v-layout row wrap>
-                <v-flex lg10 sm6 xs12>
+                <v-flex lg12>
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">
@@ -20,37 +20,8 @@
                         </v-card-text>
                     </v-card>
                 </v-flex>
-                <!--<v-flex lg2 sm6 xs12>
-                    <v-card>
-                        <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                <div class="layout row ma-0">
-                                    <div class="sm12 xs12 flex text-sm-center py-3" :class="color">
-                                        <div class="headline">Round</div>
-                                        <span class="headline">{{ auction.currentRound }}</span>
-                                    </div>
-                                </div>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-flex>
-                <v-flex lg2 sm6 xs12>
-                    <v-card>
-                        <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                <div class="layout row ma-0">
-                                  <div class="sm6 xs6 flex text-sm-center py-3">
-                                    <div class="sm12 xs12 flex text-sm-center py-3" :class="color">
-                                        <div class="headline">Phase</div>
-                                        <span class="headline">{{ auction.currentPhase }}</span>
-                                    </div>
-                                </div>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-flex>-->
 
-                <v-flex lg4 sm6 xs12>
+                <v-flex lg6 sm12>
                     <v-card>
                         <v-card-title>Auction participants</v-card-title>
                         <v-card-text class="pa-0">
@@ -78,8 +49,7 @@
                     </v-card>
                 </v-flex>
 
-
-                <v-flex lg6 sm6 xs12>
+                <v-flex lg6 sm12>
                     <v-card>
                         <v-card-title>Territories</v-card-title>
                         <v-card-text class="pa-0">
@@ -109,7 +79,7 @@
                     </v-card>
                 </v-flex>
 
-                <v-flex lg10 sm6 xs12>
+                <v-flex lg12>
                     <v-card>
                         <v-card-text class="pa-0">
                             <v-container class="pa-0">

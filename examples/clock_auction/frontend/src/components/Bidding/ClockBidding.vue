@@ -4,53 +4,54 @@
             <v-col cols="12">Clock Bidding</v-col>
         </v-row>
         <v-container grid-list-xl fluid px-0>
-          <v-layout row wrap>
-            <v-flex lg3 sm6 xs12>
-                <v-card dark>
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title>Total commitment</v-card-title>
-                            <v-card-subtitle class="headline">$ {{ totalCommitment }}</v-card-subtitle>
+            <v-layout row wrap>
+                <v-flex lg3 sm6 xs12>
+                    <v-card dark>
+                        <div class="d-flex flex-no-wrap justify-space-between">
+                            <div>
+                                <v-card-title>Total commitment</v-card-title>
+                                <v-card-subtitle class="headline">$ {{ totalCommitment }}</v-card-subtitle>
+                            </div>
                         </div>
-                    </div>
-                </v-card>
-            </v-flex>
+                    </v-card>
+                </v-flex>
 
-            <v-flex lg3 sm6 xs12>
-                <v-card dark >
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title>Eligibility</v-card-title>
-                            <v-card-subtitle class="headline">{{ eligibility }}</v-card-subtitle>
+                <v-flex lg3 sm6 xs12>
+                    <v-card dark >
+                        <div class="d-flex flex-no-wrap justify-space-between">
+                            <div>
+                                <v-card-title>Eligibility</v-card-title>
+                                <v-card-subtitle class="headline">{{ eligibility }}</v-card-subtitle>
+                            </div>
                         </div>
-                    </div>
-                </v-card>
-            </v-flex>
+                    </v-card>
+                </v-flex>
 
-            <v-flex lg3 sm6 xs12>
-                <v-card dark >
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title>Required activity</v-card-title>
-                            <v-card-subtitle class="headline">{{ requiredActivity }}</v-card-subtitle>
+                <v-flex lg3 sm6 xs12>
+                    <v-card dark >
+                        <div class="d-flex flex-no-wrap justify-space-between">
+                            <div>
+                                <v-card-title>Required activity</v-card-title>
+                                <v-card-subtitle class="headline">{{ requiredActivity }}</v-card-subtitle>
+                            </div>
                         </div>
-                    </div>
-                </v-card>
-            </v-flex>
+                    </v-card>
+                </v-flex>
 
-            <v-flex lg3 sm6 xs12>
-                <v-card dark >
-                    <div class="d-flex flex-no-wrap justify-space-between">
-                        <div>
-                            <v-card-title>Requested activity</v-card-title>
-                            <v-card-subtitle class="headline">{{ requestedActivity }}</v-card-subtitle>
+                <v-flex lg3 sm6 xs12>
+                    <v-card dark >
+                        <div class="d-flex flex-no-wrap justify-space-between">
+                            <div>
+                                <v-card-title>Requested activity</v-card-title>
+                                <v-card-subtitle class="headline">{{ requestedActivity }}</v-card-subtitle>
+                            </div>
                         </div>
-                    </div>
-                </v-card>
-            </v-flex>
-          </v-layout>
+                    </v-card>
+                </v-flex>
+            </v-layout>
         </v-container>
-        <v-row>
+
+        <v-row v-if="auction">
             <v-col cols="12">
                 <v-card>
                     <v-card-title>
@@ -78,7 +79,6 @@
                                 <v-edit-dialog
                                         :return-value.sync="props.item.quantity"
                                         large
-                                        persistent
                                         @save="save"
                                 >
                                     <div>{{ props.item.quantity}}</div>
@@ -116,7 +116,6 @@
                                 <v-edit-dialog
                                         :return-value.sync="props.item.price"
                                         large
-                                        persistent
                                         @save="save"
                                 >
                                     <div>{{ props.item.price}}</div>
@@ -140,7 +139,6 @@
                                 <v-edit-dialog
                                         :return-value.sync="props.item.quantity"
                                         large
-                                        persistent
                                         @save="save"
                                 >
                                     <div>{{ props.item.quantity}}</div>
@@ -179,6 +177,7 @@
         </v-overlay>
 
         <v-dialog
+                v-if="currentBid"
                 v-model="confirmDialog"
                 max-width="400"
         >
@@ -280,16 +279,17 @@
         },
         mounted () {
             this.waitingOverlay = true
-            axios
-                .get('http://localhost:3000/clock_rounds/' + this.auction.currentRound)
-                .then(response => {
-                    this.territories = response.data.territories
-                    this.eligibility = response.data.participants[0].eligibility
-                    this.requiredActivity = response.data.participants[0].eligibility * 0.8
-                //})
-                //.catch(error => {
-                //    alert ("error "+ error)
-                }).finally(
+
+            axios.all([
+                axios.get('http://localhost:3000/clock_rounds/' + this.auction.currentRound),
+                axios.get('http://localhost:3000/auctions/' + '2020')
+            ])
+                .then(axios.spread((roundResp, auctionResp) => {
+                    this.territories = roundResp.data.territories
+                    this.eligibility = auctionResp.data.participants[0].eligibility
+                    this.requiredActivity = auctionResp.data.participants[0].eligibility * 0.8
+                }))
+                .finally(
                     this.waitingOverlay = false
                 )
         },

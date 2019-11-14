@@ -18,7 +18,7 @@
 
                         <v-tab
                                 v-for="territory in territories"
-                                :key="territory"
+                                :key="territory.name"
                                 :href="`#tab-${territory.name}`"
                         >
                             {{ territory.name }}
@@ -26,7 +26,7 @@
 
                         <v-tab-item
                                 v-for="territory in territories"
-                                :key="territory"
+                                :key="territory.name"
                                 :value="'tab-' + territory.name"
                         >
 
@@ -41,7 +41,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="options in generateOptions(territory.clockPrice, territory.channels, territory.licenses)" :key="options.price">
+                                    <tr v-for="options in generateOptions(territory.clockPrice, territory.channels, territory.licenses)"
+                                        :key="options.id"
+                                    >
                                         <td>$ {{ options.price }}</td>
                                         <td>
                                             <v-btn-toggle
@@ -58,23 +60,22 @@
                                                 </v-btn>
                                             </v-btn-toggle>
                                         </td>
-                                        <td> status </td>
+                                        <td> {{ options.status }}</td>
                                         <td>
                                             <v-edit-dialog
                                                     :return-value.sync="options.price"
                                                     large
-                                                    persistent
                                                     @save="save"
                                             >
-                                                <div>$ {{ options.price }}</div>
+                                                <div>$ {{ options.bid }}</div>
                                                 <template v-slot:input>
                                                     <div class="mt-4 title">Update quantity</div>
                                                 </template>
                                                 <template v-slot:input>
                                                     <v-text-field
-                                                            v-model="options.price"
+                                                            v-model="options.bid"
                                                             type="number"
-                                                            :rules="[q => q >= options.price || 'Invalid quantity']"
+                                                            :rules="[q => q >= 0 || 'Invalid price']"
                                                             label="Edit"
                                                             single-line
                                                             autofocus
@@ -165,67 +166,7 @@
                 tab: null,
                 confirmDialog: false,
                 waitingOverlay: false,
-                territories: [
-                    {
-                        name: "Elbograd",
-                        licenses: 4,
-                        clockPrice: 10000,
-                        channels: [
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 10 },
-                            { impariment: 10 },
-                            { impariment: 0 },
-                        ]
-                    },
-                    {
-                        name: "Mudberg",
-                        licenses: 2,
-                        clockPrice: 10000,
-                        channels: [
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                        ]
-                    },
-                    {
-                        name: "Deserton",
-                        licenses: 3,
-                        clockPrice: 10000,
-                        channels: [
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 10 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                        ]
-                    },
-                    {
-                        name: "Phlimsk",
-                        licenses: 2,
-                        clockPrice: 10000,
-                        channels: [
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 0 },
-                            { impariment: 10 },
-                            { impariment: 0 },
-                        ]
-                    },
-                ],
+                territories: null,
                 totalCommitment: 0,
                 eligibility: 0,
                 requiredActivity: 0,
@@ -240,16 +181,27 @@
                     let chs = []
                     let price = 0
                     for (let j = i; j < i + wonChannels; j++) {
-                        price += channelPrice * (100 - channels[j].impariment) / 100
+                        price += channelPrice * (100 - channels[j].impairment) / 100
                         chs.push(j)
                     }
                     options.push({
+                        id: i,
                         price: price,
+                        bid: 0,
+                        status: "-",
                         channels: chs,
                     })
                 }
 
                 return options
+            },
+            save () {
+                this.totalCommitment = 0
+                this.requestedActivity = 0
+                for (let i=0; i<this.territories.length; i++) {
+                    this.totalCommitment += Number(this.territories[i].quantity) * Number(this.territories[i].minPrice)
+                    this.requestedActivity += Number(this.territories[i].quantity)
+                }
             },
             prepareBid: function() {
                 this.currentBid = {
@@ -283,9 +235,6 @@
                 .then(response => {
                     this.territories = response.data.territories
                 })
-            // .catch(error => {
-            //     alert ("error "+ error)
-            // })
         }
     }
 </script>
