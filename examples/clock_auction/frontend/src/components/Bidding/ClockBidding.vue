@@ -3,6 +3,7 @@
         <v-row>
             <v-col cols="12">Clock Bidding</v-col>
         </v-row>
+
         <v-container grid-list-xl fluid px-0>
             <v-layout row wrap>
                 <v-flex lg3 sm6 xs12>
@@ -189,8 +190,8 @@
                             <thead>
                             <tr>
                                 <th class="text-left">Territory</th>
-                                <th class="text-left">Quantity</th>
                                 <th class="text-left">Price</th>
+                                <th class="text-left">Quantity</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -198,6 +199,11 @@
                                 <td>{{ license.territory}}</td>
                                 <td>$ {{ license.price }}</td>
                                 <td>{{ license.quantity }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Total</th>
+                                <th class="text-left">$ {{ currentBid.totalPrice }}</th>
+                                <th class="text-left">{{ currentBid.totalQuantity }}</th>
                             </tr>
                             </tbody>
                         </template>
@@ -297,10 +303,11 @@
             save () {
                 this.totalCommitment = 0
                 this.requestedActivity = 0
-                for (let i=0; i<this.territories.length; i++) {
-                    this.totalCommitment += Number(this.territories[i].quantity) * Number(this.territories[i].minPrice)
-                    this.requestedActivity += Number(this.territories[i].quantity)
-                }
+
+                this.territories.map(t => {
+                    this.totalCommitment += Number(t.quantity) * Number(t.minPrice)
+                    this.requestedActivity += Number(t.quantity)
+                })
             },
 
             prepareBid: function() {
@@ -308,25 +315,32 @@
                     id: "bla",
                     round: this.auction.currentRound,
                     licenses: [],
-                    status: "submitted"
+                    status: "submitted",
+                    totalQuantity: 0,
+                    totalPrice: 0
                 }
 
-                for (let i=0; i < this.territories.length; i++) {
-                    if (Number(this.territories[i].quantity) > 0) {
-                        this.currentBid.licenses.push({
-                            territory: this.territories[i].name,
-                            price:  Number(this.territories[i].price),
-                            quantity: Number(this.territories[i].quantity)
-                        })
-                    }
-                }
+                this.territories.filter(t => t.quantity > 0)
+                    .map(t => {
+                        return {
+                            territory: t.name,
+                            price:  Number(t.price),
+                            quantity: Number(t.quantity)
+                        }
+                    })
+                    .map(l => {
+                        this.currentBid.licenses.push(l)
+                        this.currentBid.totalQuantity += Number(l.quantity)
+                        this.currentBid.totalPrice += Number(l.price)
+                    })
+
                 this.confirmDialog = true
             },
 
             submitBid: function () {
                 this.confirmDialog = false
                 this.waitingOverlay = true
-                this.$store.dispatch('bid/submitBid', this.bid)
+                this.$store.dispatch('bid/submitBid', this.currentBid)
                     .then(() => {
                         this.currentBid = null
                     })

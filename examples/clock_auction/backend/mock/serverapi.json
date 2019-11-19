@@ -218,6 +218,49 @@
           "quantity": 0
         }
       ]
+    },
+    {
+      "id": 3,
+      "auctionId": "2020",
+      "status": "OPEN",
+      "territories": [
+        {
+          "name": "Elbograd",
+          "supply": 10,
+          "demand": 10,
+          "minPrice": 8000,
+          "clockPrice": 11000,
+          "price": 11000,
+          "quantity": 0
+        },
+        {
+          "name": "Mudberg",
+          "supply": 8,
+          "demand": 8,
+          "minPrice": 7000,
+          "clockPrice": 9000,
+          "price": 9000,
+          "quantity": 0
+        },
+        {
+          "name": "Deserton",
+          "supply": 8,
+          "demand": 8,
+          "minPrice": 3000,
+          "clockPrice": 5000,
+          "price": 4000,
+          "quantity": 0
+        },
+        {
+          "name": "Phlimsk",
+          "supply": 5,
+          "demand": 5,
+          "minPrice": 3000,
+          "clockPrice": 4000,
+          "price": 4000,
+          "quantity": 0
+        }
+      ]
     }
   ],
 
@@ -362,6 +405,7 @@
   "clockBids": [
     {"id": "Bid007", "auctionId": "2020", "round": 20, "bidderId": "A", "territoryId": "E", "quantity": 4, "price": 6000}
   ],
+
   "assignmentBids": [
     {
       "id": "Bid007",

@@ -6,17 +6,16 @@
 
         <v-container grid-list-xl fluid px-0>
             <v-layout row wrap>
+
                 <v-flex lg12>
                     <v-card>
                         <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                <div class="layout row ma-0">
-                                    <div class="sm12 xs6 flex py-3">
-                                        <div class="headline">{{ auction.name }}</div>
-                                        <span class="caption">conducted by {{ auction.owner }}</span>
-                                    </div>
+                            <div class="layout row ma-0">
+                                <div class="sm12 xs6 flex py-3">
+                                    <div class="headline">{{ auction.name }}</div>
+                                    <span class="caption">conducted by {{ auction.owner }}</span>
                                 </div>
-                            </v-container>
+                            </div>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -25,26 +24,24 @@
                     <v-card>
                         <v-card-title>Auction participants</v-card-title>
                         <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                <v-simple-table>
-                                    <template v-slot:default>
-                                        <thead>
-                                        <tr>
-                                            <th class="text-left">Name</th>
-                                            <th class="text-left">Eligibility</th>
-                                            <th class="text-left">Id</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="item in auction.participants" :key="item.name">
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.eligibility }}</td>
-                                            <td>{{ item.id }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </v-container>
+                            <v-simple-table>
+                                <template v-slot:default>
+                                    <thead>
+                                    <tr>
+                                        <th class="text-left">Name</th>
+                                        <th class="text-left">Eligibility</th>
+                                        <th class="text-left">Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="item in auction.participants" :key="item.name">
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.eligibility }}</td>
+                                        <td>{{ item.id }}</td>
+                                    </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -53,28 +50,26 @@
                     <v-card>
                         <v-card-title>Territories</v-card-title>
                         <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                <v-simple-table>
-                                    <template v-slot:default>
-                                        <thead>
-                                        <tr>
-                                            <th class="text-left">Name</th>
-                                            <th class="text-left">Population</th>
-                                            <th class="text-left">Supply</th>
-                                            <th class="text-left">Opening bidding price</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="item in auction.territories" :key="item.name">
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.population }}</td>
-                                            <td>{{ item.supply }}</td>
-                                            <td>$ {{ item.openingPrice }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </template>
-                                </v-simple-table>
-                            </v-container>
+                            <v-simple-table>
+                                <template v-slot:default>
+                                    <thead>
+                                    <tr>
+                                        <th class="text-left">Name</th>
+                                        <th class="text-left">Population</th>
+                                        <th class="text-left">Supply</th>
+                                        <th class="text-left">Opening bidding price</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="item in auction.territories" :key="item.name">
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.population }}</td>
+                                        <td>{{ item.supply }}</td>
+                                        <td>$ {{ item.openingPrice }}</td>
+                                    </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -82,12 +77,11 @@
                 <v-flex lg12>
                     <v-card>
                         <v-card-text class="pa-0">
-                            <v-container class="pa-0">
-                                {{ auction }}
-                            </v-container>
+                            {{ auction }}
                         </v-card-text>
                     </v-card>
                 </v-flex>
+
             </v-layout>
         </v-container>
     </div>

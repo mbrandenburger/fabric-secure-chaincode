@@ -41,7 +41,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="options in generateOptions(territory.clockPrice, territory.channels, territory.licenses)"
+                                    <tr v-for="options in territory.options"
                                         :key="options.id"
                                     >
                                         <td>$ {{ options.price }}</td>
@@ -63,13 +63,13 @@
                                         <td> {{ options.status }}</td>
                                         <td>
                                             <v-edit-dialog
-                                                    :return-value.sync="options.price"
+                                                    :return-value.sync="options.bid"
                                                     large
                                                     @save="save"
                                             >
                                                 <div>$ {{ options.bid }}</div>
                                                 <template v-slot:input>
-                                                    <div class="mt-4 title">Update quantity</div>
+                                                    <div class="mt-4 title">Place your bid</div>
                                                 </template>
                                                 <template v-slot:input>
                                                     <v-text-field
@@ -167,12 +167,9 @@
                 confirmDialog: false,
                 waitingOverlay: false,
                 territories: null,
-                totalCommitment: 0,
-                eligibility: 0,
-                requiredActivity: 0,
-                requestedActivity: 0,
             }
         },
+
         methods: {
             generateOptions: function(channelPrice, channels, wonChannels) {
                 const numChannels = channels.length
@@ -196,12 +193,7 @@
                 return options
             },
             save () {
-                this.totalCommitment = 0
-                this.requestedActivity = 0
-                for (let i=0; i<this.territories.length; i++) {
-                    this.totalCommitment += Number(this.territories[i].quantity) * Number(this.territories[i].minPrice)
-                    this.requestedActivity += Number(this.territories[i].quantity)
-                }
+
             },
             prepareBid: function() {
                 this.currentBid = {
@@ -210,15 +202,17 @@
                     status: "submitted"
                 }
 
-                for (let i=0; i < this.territories.length; i++) {
-                    if (Number(this.territories[i].quantity) > 0) {
-                        this.currentBid.licences.push({
-                            territory: this.territories[i].name,
-                            price:  Number(this.territories[i].openingPrice),
-                            quantity: Number(this.territories[i].quantity)
-                        })
-                    }
-                }
+                this.territories.filter(t => t.quantity > 0)
+                    .map(t => {
+                        return {
+                            territory: t.name,
+                            price:  Number(t.openingPrice),
+                            quantity: Number(t.quantity)
+                        }
+                    })
+                    .map(l => this.currentBid.licenses.push(l))
+
+
                 this.confirmDialog = true
             },
             submitBid: function () {
@@ -234,6 +228,12 @@
             axios.get('http://localhost:3000/assignment')
                 .then(response => {
                     this.territories = response.data.territories
+
+                    this.territories.map(t => {
+                        t.options = this.generateOptions(t.clockPrice, t.channels, t.licenses)
+                    })
+
+                    console.log(this.territories)
                 })
         }
     }

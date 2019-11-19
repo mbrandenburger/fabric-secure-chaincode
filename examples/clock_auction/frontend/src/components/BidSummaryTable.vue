@@ -13,6 +13,10 @@
                     <template v-slot:item.openingPrice="props">
                         $ {{ props.item.openingPrice }}
                     </template>
+
+                    <template v-slot:item.action="{ item }">
+                        <v-icon small class="mr-2" >fa-search</v-icon>
+                    </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
@@ -29,10 +33,10 @@
                 tableHeader: [
                     {text: 'id', value: 'id',},
                     {text: 'Round', value: 'round',},
-                    {text: 'Territory', value: 'round',},
-                    {text: 'Price', value: 'price',},
-                    {text: 'Quantity', value: 'quantity',},
+                    {text: 'Total Price', value: 'totalPrice',},
+                    {text: 'Total Quantity', value: 'totalQuantity',},
                     {text: 'Status', value: 'status',},
+                    {text: 'Actions', value: 'action', sortable: false},
                 ],
             }
         },
