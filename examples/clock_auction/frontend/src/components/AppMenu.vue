@@ -7,12 +7,11 @@
     >
         <v-list-item>
             <v-list-item-content>
-                <v-list-item-title class="title">
-                    A-Telco
+                <v-list-item-title class="title">{{ currentUser }}
                 </v-list-item-title>
-                <v-list-item-subtitle>
+                <!--<v-list-item-subtitle>
                     A-Telco
-                </v-list-item-subtitle>
+                </v-list-item-subtitle>-->
             </v-list-item-content>
         </v-list-item>
 
@@ -50,6 +49,8 @@
 
 
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         name: "BidderMenu",
         data () {
@@ -66,5 +67,8 @@
                 right: null,
             }
         },
+        computed: mapState({
+            currentUser: state => state.currentUser
+        }),
     }
 </script>
