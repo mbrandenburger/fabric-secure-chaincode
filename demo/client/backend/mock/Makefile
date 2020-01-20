@@ -10,7 +10,8 @@ DOCKER_IMAGE = auction_mock_backend
 APP_SRC = ${PWD}
 
 run-go:
-	$(GO) run .
+	$(GO) build .
+	./mock --debug
 
 run-fpc:
 	$(GO) build -tags fpc
