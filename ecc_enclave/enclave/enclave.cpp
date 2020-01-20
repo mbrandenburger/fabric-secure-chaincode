@@ -39,7 +39,8 @@ int ecall_bind_tlcc(const sgx_report_t* report, const uint8_t* pubkey)
     // here is our testing backdoor for starting ecc without a tlcc instance
     if (report == NULL && pubkey == NULL)
     {
-        LOG_WARNING("Start without TLCC!!!!");
+//        LOG_WARNING("Start without TLCC!!!!");
+        LOG_INFO("Start TLCC in demo mode");
         return SGX_SUCCESS;
     }
 
@@ -253,7 +254,8 @@ int ecall_cc_invoke(const char* encoded_args,
     sgx_ec256_signature_t* signature,
     void* u_shim_ctx)
 {
-    LOG_DEBUG("ecall_cc_invoke: \tArgs: %s", encoded_args);
+    LOG_DEBUG("ecall_cc_invoke: Decrypt invocation args");
+    LOG_DEBUG("ecall_cc_invoke: Args: %s", encoded_args);
 
     t_shim_ctx_t ctx;
     ctx.u_shim_ctx = u_shim_ctx;

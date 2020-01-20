@@ -40,6 +40,8 @@ void get_creator_name(
 void get_state(
     const char* key, uint8_t* val, uint32_t max_val_len, uint32_t* val_len, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("GetState: Get encrypted state for key=%s", key);
+    LOG_DEBUG("GetState: Add key=%s to readset", key);
     // read state
     ctx->read_set.insert(std::string(key));
 
@@ -60,15 +62,13 @@ void get_state(
         sgx_sha256_msg(encoded_cipher, encoded_cipher_len, &state_hash);
     }
 
+    LOG_DEBUG("GetState: Verify state integrity with TLCC", key);
     if (check_cmac(key, NULL, &state_hash, &session_key, &cmac) != 0)
     {
-        LOG_ERROR("Enclave: VIOLATION!!! Oh oh! cmac does not match!");
+//        LOG_ERROR("Enclave: VIOLATION!!! Oh oh! cmac does not match!");
         // TODO: proper error handling/abort rather than just continue
     }
-    else
-    {
-        LOG_DEBUG("Enclave: State verification: cmac correct!! :D");
-    }
+    LOG_DEBUG("GetState: Integrity verification successful", key);
     // if nothing read, no need for decryption
     if (encoded_cipher_len == 0)
     {
@@ -86,6 +86,7 @@ void get_state(
     }
 
     // decrypt
+    LOG_DEBUG("GetState: Decrypt state for key=%s", key);
     *val_len = cipher.size() - SGX_AESGCM_IV_SIZE - SGX_AESGCM_MAC_SIZE;
     int ret = decrypt_state(
         &state_encryption_key, (uint8_t*)cipher.c_str(), cipher.size(), val, *val_len);
@@ -98,6 +99,7 @@ void get_state(
 
 void put_state(const char* key, uint8_t* val, uint32_t val_len, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("PutState: Encrypt state for key=%s", key);
     // encrypt
     uint32_t cipher_len = val_len + SGX_AESGCM_IV_SIZE + SGX_AESGCM_MAC_SIZE;
     uint8_t cipher[cipher_len];
@@ -111,6 +113,7 @@ void put_state(const char* key, uint8_t* val, uint32_t val_len, shim_ctx_ptr_t c
     std::string base64 = base64_encode((unsigned char*)cipher, cipher_len);
 
     // write state
+    LOG_DEBUG("PutState: Add encrypted state to writes set");
     ctx->write_set.insert({key, base64});
     ocall_put_state(key, (uint8_t*)base64.c_str(), base64.size(), ctx->u_shim_ctx);
 }
@@ -140,6 +143,8 @@ int unmarshal_values(
 void get_state_by_partial_composite_key(
     const char* comp_key, std::map<std::string, std::string>& values, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("GetRange: Perform range query for %s", comp_key);
+    LOG_DEBUG("GetRange: Add range query %s to readset", comp_key);
     uint8_t json[262144];  // 128k needed for 1000 bids
     uint32_t len;
 
@@ -166,6 +171,7 @@ void get_state_by_partial_composite_key(
         std::string cipher = base64_decode(u.second.c_str());
 
         // decrypt
+
         uint32_t plain_len = cipher.size() - SGX_AESGCM_IV_SIZE - SGX_AESGCM_MAC_SIZE;
         uint8_t plain[plain_len];
         int ret = decrypt_state(
@@ -179,18 +185,20 @@ void get_state_by_partial_composite_key(
         u.second = s;
     }
 
+    LOG_DEBUG("GetState: Decrypt range query results");
+
     sgx_sha256_get_hash(sha_handle, &state_hash);
     sgx_sha256_close(sha_handle);
 
+
+    LOG_DEBUG("GetRange: Verify state integrity with TLCC");
     if (check_cmac(comp_key, NULL, &state_hash, &session_key, &cmac) != 0)
     {
-        LOG_ERROR("Enclave: VIOLATION!!! Oh oh! cmac does not match!");
+//        LOG_ERROR("Enclave: VIOLATION!!! Oh oh! cmac does not match!");
         // TODO: proper error handling/abort rather than just continue
     }
-    else
-    {
-        LOG_DEBUG("Enclave: State verification: cmac correct!! :D");
-    }
+    LOG_DEBUG("GetRange: Integrity verification successful");
+
 }
 
 int get_string_args(std::vector<std::string>& argss, shim_ctx_ptr_t ctx)

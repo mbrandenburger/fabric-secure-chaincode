@@ -245,24 +245,24 @@
         "id": 1,
         "displayName": "A-Telecom",
         "principal": {
-          "mspId": "org1",
-          "dn": "CN=,OU=user+OU=org1"
+          "mspId": "orgA",
+          "dn": "CN=,OU=user+OU=orgA"
         }
       },
       {
         "id": 2,
         "displayName": "B-Net",
         "principal": {
-          "mspId": "org1",
-          "dn": "CN=,OU=user+OU=org1"
+          "mspId": "orgB",
+          "dn": "CN=,OU=user+OU=orgB"
         }
       },
       {
         "id": 3,
         "displayName": "C-Mobile",
         "principal": {
-          "mspId": "org1",
-          "dn": "CN=,OU=user+OU=org1"
+          "mspId": "orgC",
+          "dn": "CN=,OU=user+OU=orgC"
         }
       }
     ],
