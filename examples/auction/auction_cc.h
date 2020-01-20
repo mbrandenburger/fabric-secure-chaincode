@@ -14,3 +14,4 @@ std::string auction_submit(
     std::string auction_name, std::string bidder_name, int value, shim_ctx_ptr_t ctx);
 std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx);
 std::string auction_close(std::string auction_name, shim_ctx_ptr_t ctx);
+std::string auction_status(std::string auction_name, shim_ctx_ptr_t ctx);

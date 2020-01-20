@@ -251,7 +251,7 @@ SPDX-License-Identifier: Apache-2.0
 import axios from "axios";
 import { mapState } from "vuex";
 import BiddingInfo from "./BiddingInfo";
-import auction from "@/api/auction";
+import auction from "@/api/simple_auction";
 import SubmitTransaction from "../SubmitTransaction";
 import helpers from "@/store/helpers";
 

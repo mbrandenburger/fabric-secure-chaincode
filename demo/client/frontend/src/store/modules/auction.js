@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 import axios from "axios";
-import auction from "@/api/auction";
+import auction from "@/api/simple_auction";
 import helpers from "../helpers";
 
 const state = {

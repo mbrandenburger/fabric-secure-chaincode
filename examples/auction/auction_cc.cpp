@@ -17,12 +17,12 @@
 #define OK "OK"
 #define AUCTION_DRAW "DRAW"
 #define AUCTION_NO_BIDS "NO_BIDS"
-#define AUCTION_ALREADY_EXISTING "AUCTION_ALREADY_EXISTING"
-#define AUCTION_NOT_EXISTING "AUCTION_NOT_EXISTING"
+#define AUCTION_ALREADY_EXISTS "AUCTION_ALREADY_EXISTS"
+#define AUCTION_DOES_NOT_EXIST "AUCTION_DOES_NOT_EXIST"
 #define AUCTION_ALREADY_CLOSED "AUCTION_ALREADY_CLOSED"
 #define AUCTION_STILL_OPEN "AUCTION_STILL_OPEN"
 
-#define INITALIZED_KEY "__initialized"
+#define INITALIZED_KEY "__enclave_initialized"
 #define AUCTION_HOUSE_NAME_KEY "__auction_house_name"
 
 const std::string SEP = ".";
@@ -142,10 +142,14 @@ int invoke(
     {
         result = auction_eval(auction_name, ctx);
     }
+    else if (function_name == "status")
+    {
+        result = auction_status(auction_name, ctx);
+    }
     else
     {
         // unknown function
-        LOG_ERROR("AuctionCC: RECEIVED UNKOWN transaction");
+        LOG_ERROR("AuctionCC: Received unknown transaction");
         *actual_response_len = 0;
         return -1;
     }
@@ -169,8 +173,23 @@ int invoke(
     return 0;
 }
 
+std::string error(std::string msg) {
+    status_msg_t status;
+    status.rc = 1;
+    status.message = msg;
+    return marshal_response(&status, "");
+
+}
+
+std::string success(std::string response) {
+    status_msg_t status;
+    status.rc = 0;
+    return marshal_response(&status, response);
+}
+
 std::string auction_create(std::string auction_name, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("Auction CC: Create auction with name %s", auction_name);
     // check if auction already exists
     uint32_t auction_bytes_len = 0;
     uint8_t auction_bytes[MAX_VALUE_SIZE];
@@ -180,7 +199,7 @@ std::string auction_create(std::string auction_name, shim_ctx_ptr_t ctx)
     {
         // auction already exists
         LOG_DEBUG("AuctionCC: Auction already exists");
-        return AUCTION_ALREADY_EXISTING;
+        return error(AUCTION_ALREADY_EXISTS);
     }
 
     // create new auction
@@ -192,12 +211,13 @@ std::string auction_create(std::string auction_name, shim_ctx_ptr_t ctx)
     std::string json = marshal_auction(&new_auction);
     put_state(auction_name.c_str(), (uint8_t*)json.c_str(), json.size(), ctx);
 
-    return OK;
+    return success("{\"auctionId\":1}");
 }
 
 std::string auction_submit(
     std::string auction_name, std::string bidder_name, int value, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("Auction CC: Process bid by %s", bidder_name);
     // check if auction already exists
     uint32_t auction_bytes_len = 0;
     uint8_t auction_bytes[MAX_VALUE_SIZE];
@@ -206,7 +226,7 @@ std::string auction_submit(
     if (auction_bytes_len == 0)
     {
         LOG_DEBUG("AuctionCC: Auction does not exist");
-        return AUCTION_NOT_EXISTING;
+        return error(AUCTION_DOES_NOT_EXIST);
     }
 
     // get auction struct from json
@@ -216,7 +236,7 @@ std::string auction_submit(
     if (!the_auction.is_open)
     {
         LOG_DEBUG("AuctionCC: Auction is already closed");
-        return AUCTION_ALREADY_CLOSED;
+        return error(AUCTION_ALREADY_CLOSED);
     }
 
     // create composite key "auction_name.bidder_name"
@@ -231,11 +251,13 @@ std::string auction_submit(
     std::string json = marshal_bid(&bid);
     put_state(new_key.c_str(), (uint8_t*)json.c_str(), json.size(), ctx);
 
-    return OK;
+    return success(OK);
 }
 
 std::string auction_close(std::string auction_name, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("Auction CC: Close auction %s", auction_name);
+
     // check if auction already exists
     uint32_t auction_bytes_len = 0;
     uint8_t auction_bytes[MAX_VALUE_SIZE];
@@ -244,7 +266,7 @@ std::string auction_close(std::string auction_name, shim_ctx_ptr_t ctx)
     if (auction_bytes_len == 0)
     {
         LOG_DEBUG("AuctionCC: Auction does not exist");
-        return AUCTION_NOT_EXISTING;
+        return error(AUCTION_DOES_NOT_EXIST);
     }
 
     // get auction struct from json
@@ -254,7 +276,7 @@ std::string auction_close(std::string auction_name, shim_ctx_ptr_t ctx)
     if (!the_auction.is_open)
     {
         LOG_DEBUG("AuctionCC: Auction is already closed");
-        return AUCTION_ALREADY_CLOSED;
+        return error(AUCTION_ALREADY_CLOSED);
     }
 
     // close auction
@@ -264,11 +286,13 @@ std::string auction_close(std::string auction_name, shim_ctx_ptr_t ctx)
     std::string json = marshal_auction(&the_auction);
     put_state(auction_name.c_str(), (uint8_t*)json.c_str(), json.size(), ctx);
 
-    return OK;
+    return success(OK);
 }
 
 std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
 {
+    LOG_DEBUG("Auction CC: Evaluate auction %s", auction_name);
+
     // check if auction already exists
     uint32_t auction_bytes_len = 0;
     uint8_t auction_bytes[MAX_VALUE_SIZE];
@@ -277,7 +301,7 @@ std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
     if (auction_bytes_len == 0)
     {
         LOG_DEBUG("AuctionCC: Auction does not exist");
-        return AUCTION_NOT_EXISTING;
+        return error(AUCTION_DOES_NOT_EXIST);
     }
 
     // get auction struct from json
@@ -288,7 +312,7 @@ std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
     if (the_auction.is_open)
     {
         LOG_DEBUG("AuctionCC: Auction is still open");
-        return AUCTION_STILL_OPEN;
+        return error(AUCTION_STILL_OPEN);
     }
 
     // get all bids
@@ -299,7 +323,7 @@ std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
     if (values.empty())
     {
         LOG_DEBUG("AuctionCC: No bids");
-        return AUCTION_NO_BIDS;
+        return error(AUCTION_NO_BIDS);
     }
 
     // search highest bid
@@ -307,7 +331,7 @@ std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
     int high = -1;
     int draw = 0;
 
-    LOG_DEBUG("AuctionCC: All concidered bids:");
+    LOG_DEBUG("AuctionCC: All considered bids:");
     for (auto u : values)
     {
         bid_t b;
@@ -329,11 +353,31 @@ std::string auction_eval(std::string auction_name, shim_ctx_ptr_t ctx)
     if (draw != 1)
     {
         LOG_DEBUG("AuctionCC: Winner is: %s with %d", winner.bidder_name.c_str(), winner.value);
-        return marshal_bid(&winner);
+        return success(marshal_bid(&winner));
     }
     else
     {
         LOG_DEBUG("AuctionCC: DRAW");
-        return AUCTION_DRAW;
+        return error(AUCTION_DRAW);
     }
+}
+
+std::string auction_status(std::string auction_name, shim_ctx_ptr_t ctx)
+{
+    // check if auction already exists
+    uint32_t auction_bytes_len = 0;
+    uint8_t auction_bytes[MAX_VALUE_SIZE];
+    get_state(auction_name.c_str(), auction_bytes, sizeof(auction_bytes), &auction_bytes_len, ctx);
+
+    if (auction_bytes_len == 0)
+    {
+        LOG_DEBUG("AuctionCC: Auction does not exist");
+        return error(AUCTION_DOES_NOT_EXIST);
+    }
+
+    // get auction struct from json
+    auction_t the_auction;
+    unmarshal_auction(&the_auction, (const char*)auction_bytes, auction_bytes_len);
+
+    return success(marshal_status("clock", 1, the_auction.is_open));
 }
