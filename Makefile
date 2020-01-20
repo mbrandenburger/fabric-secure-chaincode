@@ -46,3 +46,8 @@ godeps: gotools
 
 plugins:
 	$(foreach DIR, $(PLUGINS), $(MAKE) -C $(DIR) build || exit;)
+
+
+.PHONY: run-dev
+run-dev:
+	$(DOCKER) run -p 3000:3000 -it -v $(PWD):/project/src/github.com/hyperledger-labs/fabric-private-chaincode hyperledger/fabric-private-chaincode-dev
