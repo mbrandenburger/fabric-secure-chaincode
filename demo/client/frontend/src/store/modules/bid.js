@@ -4,7 +4,8 @@ Copyright IBM Corp. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0
 */
 
-import auction from "@/api/auction";
+import auction from "@/api/simple_auction";
+import helpers from "../helpers";
 
 const state = {
   submittedBids: []
@@ -14,13 +15,10 @@ const getters = {};
 
 const actions = {
   submitBid({ commit }, bid) {
-    auction
+    return auction
       .submitClockBid(bid)
-      .then(response => {
-        console.log(response);
-        commit("pushBid", bid);
-      })
-      .catch(err => console.log(err));
+      .then(response => helpers.checkStatus(response.data))
+      .then(() => commit("pushBid", bid));
   }
 };
 
