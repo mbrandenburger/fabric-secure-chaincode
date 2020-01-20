@@ -20,6 +20,7 @@ const state = {
   state: "clock",
   clockRound: 1,
   roundActive: false,
+  winner: ""
 };
 
 const getters = {};
@@ -66,6 +67,7 @@ const actions = {
     return auction
       .startNextRound(auction_id)
       .then(resp => helpers.checkStatus(resp.data))
+      .then(winner => commit("SET_WINNER", winner));
   },
 
   UPDATE_AUCTION_STATE({ commit }, state) {
@@ -104,6 +106,9 @@ const mutations = {
   },
   SET_CLOCK_ROUND: (state, round) => {
     state.clockRound = round;
+  },
+  SET_WINNER: (state, winner) => {
+    state.winner = winner;
   }
 };
 
