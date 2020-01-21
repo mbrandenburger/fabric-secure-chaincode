@@ -49,8 +49,8 @@ SPDX-License-Identifier: Apache-2.0
             >Fabric Private Chaincode</v-card-title
           >
           <v-card-subtitle class="caption">
-            Enables the execution of chaincodes using Intel SGX for Hyperledger
-            Fabric.</v-card-subtitle
+            Enables the execution of chaincodes using Intel(R) SGX for
+            Hyperledger Fabric.</v-card-subtitle
           >
         </v-card>
       </div>
