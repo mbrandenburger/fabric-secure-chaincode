@@ -7,6 +7,12 @@ SPDX-License-Identifier: Apache-2.0
 package ercc
 
 import (
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/json"
+
+	"github.com/hyperledger-labs/fabric-private-chaincode/ercc/attestation"
+
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -23,6 +29,25 @@ func (t *MockEnclaveRegistryStub) GetSPID(stub shim.ChaincodeStubInterface, chai
 
 // RegisterEnclave registers enclave at ercc
 func (t *MockEnclaveRegistryStub) RegisterEnclave(stub shim.ChaincodeStubInterface, chaincodeName, channel string, enclavePk, enclaveQuote []byte) error {
-	// fmt.Println("Register: " + base64.StdEncoding.EncodeToString(enclaveID) + " : " + base64.StdEncoding.EncodeToString(enclaveQuote))
+	//fmt.Println("Register: " + base64.StdEncoding.EncodeToString(enclaveID) + " : " + base64.StdEncoding.EncodeToString(enclaveQuote))
+
+	attestationReport := attestation.IASAttestationReport{
+		EnclavePk:                   enclavePk,
+		IASReportSignature:          "dummySignature",
+		IASReportSigningCertificate: "dummyCert",
+		IASReportBody:               []byte("dummyBody"),
+	}
+
+	// store attestation report under enclavePk hash in state
+	attestationReportAsBytes, err := json.Marshal(attestationReport)
+	if err != nil {
+		return err
+	}
+
+	// create hash of enclave pk
+	enclavePkHash := sha256.Sum256(enclavePk)
+	enclavePkHashBase64 := base64.StdEncoding.EncodeToString(enclavePkHash[:])
+	err = stub.PutState(enclavePkHashBase64, attestationReportAsBytes)
+
 	return nil
 }

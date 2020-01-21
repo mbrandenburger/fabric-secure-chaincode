@@ -553,7 +553,8 @@ func (e *StubImpl) Destroy() error {
 }
 
 func (e *StubImpl) MrEnclave() (string, error) {
-	binMrEnclave, err := ioutil.ReadFile("mrenclave")
+	// TODO ouch ... this is tricky. double check how is actually working with a real peer
+	binMrEnclave, err := ioutil.ReadFile("enclave/lib/mrenclave")
 	if err != nil {
 		return "", fmt.Errorf("Error reading MrEnclave from file: Reason %s", err.Error())
 	}

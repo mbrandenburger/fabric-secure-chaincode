@@ -68,7 +68,14 @@ int invoke(
     char _auction_house_name_buf[128];
 
     uint32_t init_len = -1;
-    get_state(INITALIZED_KEY, (uint8_t*)&_initialized, sizeof(_initialized), &init_len, ctx);
+    int ret = get_state(INITALIZED_KEY, (uint8_t*)&_initialized, sizeof(_initialized), &init_len, ctx);
+    if (ret != 0) {
+       LOG_ERROR("AuctionCC: Get state error ...");
+       *actual_response_len = 0;
+       return -1;
+   }
+
+
     if ((init_len == 0) || !_initialized)
     {
         _initialized = false;

@@ -40,13 +40,13 @@ import (
 
 var flagPort string
 var flagDebug bool
-var stub *MockStubWrapper
+var ccStub *MockStubWrapper
+var erccStub *shim.MockStub
 var logger = shim.NewLogger("server")
 var notifier = NewNotifier()
 
 const ccName = "FPCAuction"
 const channelName = "Mychannel"
-
 const mspId = "org1"
 
 func init() {
@@ -101,15 +101,26 @@ func startServer() {
 	r.Run(":" + flagPort)
 }
 
+func setLoggers() {
+	//loggers := []string{"mock", "ercc"}
+	loggers := []string{"ercc", "ecc"}
+	for _, n := range loggers {
+		logger := shim.NewLogger(n)
+		logger.SetLevel(shim.LogDebug)
+	}
+}
+
 func deployChaincode() {
 	logger.Info("Deploy new chaincode")
+	setLoggers()
 
-	stub = NewWrapper(ccName, chaincode.NewMockAuction(), notifier)
+	ccStub = NewWrapper(ccName, chaincode.NewMockAuction(), notifier)
+	ccStub.MockInit("0", [][]byte{[]byte("init")})
 
 	// setup and init
-	stub.Creator = "Auctioneer"
-	stub.MockInvoke("someTxID", [][]byte{[]byte("__setup"), []byte("ercc"), []byte(channelName), []byte("tlcc")})
-	stub.MockInvoke("1", [][]byte{[]byte("__init"), []byte(ccName)})
+	ccStub.Creator = "Auctioneer"
+	ccStub.MockInvoke("someTxID", [][]byte{[]byte("__setup"), []byte("ercc"), []byte(channelName), []byte("tlcc")})
+	ccStub.MockInvoke("1", [][]byte{[]byte("__init"), []byte(ccName)})
 }
 
 func stream(c *gin.Context) {
@@ -129,7 +140,7 @@ func stream(c *gin.Context) {
 
 func startDemo(c *gin.Context) {
 	// destroy enclave
-	Destroy(stub)
+	Destroy(ccStub)
 	notifier.Submit("restart")
 
 	// let's create a new chaincode
@@ -138,12 +149,12 @@ func startDemo(c *gin.Context) {
 }
 
 func getLedger(c *gin.Context) {
-	ledger := stub.Transactions
+	ledger := ccStub.Transactions
 	c.IndentedJSON(http.StatusOK, ledger)
 }
 
 func getState(c *gin.Context) {
-	ledgerState := stub.MockStub.State
+	ledgerState := ccStub.MockStub.State
 	c.IndentedJSON(http.StatusOK, ledgerState)
 }
 
@@ -155,7 +166,7 @@ func deleteStateEntry(c *gin.Context) {
 	}
 	key = string(bk)
 
-	_ = stub.DelState(key)
+	_ = ccStub.DelState(key)
 	c.String(http.StatusOK, "deleted")
 }
 
@@ -172,9 +183,9 @@ func updateStateEntry(c *gin.Context) {
 		c.String(http.StatusBadRequest, "error reading data")
 	}
 
-	stub.MockStub.TxID = "dummyTXId"
-	defer func() { stub.MockStub.TxID = "" }()
-	_ = stub.PutState(key, value)
+	ccStub.MockStub.TxID = "dummyTXId"
+	defer func() { ccStub.MockStub.TxID = "" }()
+	_ = ccStub.PutState(key, value)
 
 	logger.Infof("updated %s to %s", key, value)
 	c.String(http.StatusOK, "updated")
@@ -193,7 +204,7 @@ func getDefaultAuction(c *gin.Context) {
 func getAuctionDetails(c *gin.Context) {
 	auctionId := c.Params.ByName("auctionId")
 
-	val, _ := stub.MockStub.GetState(auctionId)
+	val, _ := ccStub.MockStub.GetState(auctionId)
 	if val == nil {
 		// no auction created yet
 		status := ResponseStatus{
@@ -270,13 +281,13 @@ func (response *ResponseObject) UnmarshalJSON(data []byte) (err error) {
 // Main invocation handling
 func invoke(c *gin.Context) {
 
-	if stub == nil {
-		panic("stub is nil!")
+	if ccStub == nil {
+		panic("ccStub is nil!")
 	}
 
-	stub.MockStub.ChannelID = channelName
+	ccStub.MockStub.ChannelID = channelName
 	user := c.GetHeader("x-user")
-	stub.Creator = user
+	ccStub.Creator = user
 
 	args, err := parsePayload(c)
 	if err != nil {
@@ -286,7 +297,7 @@ func invoke(c *gin.Context) {
 	}
 
 	logger.Debugf("%s invokes %s", user, args)
-	res := stub.MockInvoke("someTxID", args)
+	res := ccStub.MockInvoke("someTxID", args)
 
 	fpcResponse := createFPCResponse(res)
 	c.Data(http.StatusOK, c.ContentType(), fpcResponse)
@@ -295,13 +306,13 @@ func invoke(c *gin.Context) {
 // Main invocation handling
 func query(c *gin.Context) {
 
-	if stub == nil {
-		panic("stub is nil!")
+	if ccStub == nil {
+		panic("ccStub is nil!")
 	}
 
-	stub.MockStub.ChannelID = channelName
+	ccStub.MockStub.ChannelID = channelName
 	user := c.GetHeader("x-user")
-	stub.Creator = user
+	ccStub.Creator = user
 
 	args, err := parsePayload(c)
 	if err != nil {
@@ -311,7 +322,7 @@ func query(c *gin.Context) {
 	}
 
 	logger.Debugf("%s queries %s", user, args)
-	res := stub.MockQuery("someTxID", args)
+	res := ccStub.MockQuery("someTxID", args)
 
 	fpcResponse := createFPCResponse(res)
 	c.Data(http.StatusOK, c.ContentType(), fpcResponse)

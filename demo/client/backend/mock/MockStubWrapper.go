@@ -154,6 +154,10 @@ func (m *MockStubWrapper) MockQuery(uuid string, args [][]byte) pb.Response {
 	return resp
 }
 
+func (m *MockStubWrapper) MockPeerChaincode(invokableChaincodeName string, otherStub *shim.MockStub) {
+	m.MockStub.MockPeerChaincode(invokableChaincodeName, otherStub)
+}
+
 func (m *MockStubWrapper) GetArgs() [][]byte {
 	return m.MockStub.GetArgs()
 }

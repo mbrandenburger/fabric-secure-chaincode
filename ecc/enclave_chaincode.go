@@ -44,6 +44,7 @@ func NewEcc() *EnclaveChaincode {
 }
 
 func CreateMockedECC() *EnclaveChaincode {
+	logger.Debug("NewMockedEcc")
 	return &EnclaveChaincode{
 		erccStub: &ercc.MockEnclaveRegistryStub{},
 		tlccStub: &tlcc.MockTLCCStub{},
@@ -56,6 +57,7 @@ func CreateMockedECC() *EnclaveChaincode {
 func (t *EnclaveChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	mrenclave, err := t.enclave.MrEnclave()
 	if err != nil {
+		logger.Errorf("Cannot get mrenclave: %s", err)
 		return shim.Error(err.Error())
 	}
 	logger.Debugf("Init: chaincode [mrenclave=%s]", mrenclave)
@@ -114,7 +116,9 @@ func (t *EnclaveChaincode) setup(stub shim.ChaincodeStubInterface) pb.Response {
 	//get spid from ercc
 	spid, err := t.erccStub.GetSPID(stub, erccName, channelName)
 	if err != nil {
-		return shim.Error(err.Error())
+		errMsg := fmt.Sprintf("t.erccStub.GetSPID failed: %s", err)
+		logger.Errorf(errMsg)
+		return shim.Error(errMsg)
 	}
 	logger.Debugf("ecc: SPID from ercc: %x", spid)
 
@@ -132,12 +136,16 @@ func (t *EnclaveChaincode) setup(stub shim.ChaincodeStubInterface) pb.Response {
 	// we just add mrenclave to the proposal readset
 	_, err = stub.GetState(utils.MrEnclaveStateKey)
 	if err != nil {
-		return shim.Error(err.Error())
+		errMsg := fmt.Sprintf("get MrEnclaved failed: %s", err)
+		logger.Errorf(errMsg)
+		return shim.Error(errMsg)
 	}
 
 	// register enclave at ercc
 	if err = t.erccStub.RegisterEnclave(stub, erccName, channelName, []byte(enclavePkBase64), []byte(quoteBase64)); err != nil {
-		return shim.Error(err.Error())
+		errMsg := fmt.Sprintf("t.erccStub.RegisterEnclave failed: %s", err)
+		logger.Errorf(errMsg)
+		return shim.Error(errMsg)
 	}
 
 	logger.Debugf("ecc: registration done; next binding")
@@ -152,6 +160,8 @@ func (t *EnclaveChaincode) setup(stub shim.ChaincodeStubInterface) pb.Response {
 	// get report and pk from tlcc using target info from ecc enclave
 	tlccReport, tlccPk, err := t.tlccStub.GetReport(stub, "tlcc", channelName, eccTargetInfo)
 	if err != nil {
+		errMsg := fmt.Sprintf("t.tlccStub.GetReport failed: %s", err)
+		logger.Errorf(errMsg)
 		return shim.Error(err.Error())
 	}
 
@@ -217,7 +227,7 @@ func (t *EnclaveChaincode) init(stub shim.ChaincodeStubInterface) pb.Response {
 			Message: errMsg,
 		}
 	}
-	logger.Debugf("init response: %v", response)
+	logger.Debugf("init response: %s", response)
 	return response
 }
 
@@ -279,7 +289,7 @@ func (t *EnclaveChaincode) invoke(stub shim.ChaincodeStubInterface) pb.Response 
 			Message: errMsg,
 		}
 	}
-	logger.Debugf("invoke response: %v", response)
+	logger.Debugf("invoke response: %s", response)
 	return response
 }
 

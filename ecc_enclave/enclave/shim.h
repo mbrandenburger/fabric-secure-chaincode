@@ -34,16 +34,16 @@ int invoke(uint8_t* response,
 // put/get state
 //-------------------------------------------------
 // - store value located at val of size val_len under key key
-void put_state(const char* key, uint8_t* val, uint32_t val_len, shim_ctx_ptr_t ctx);
+int put_state(const char* key, uint8_t* val, uint32_t val_len, shim_ctx_ptr_t ctx);
 // - look for key and, if found, store it in val and return size in val_len.
 //   val must be of size at least max_val_len and the query will fail
 //   if the retrieved value would be larger.
 //   Absence of key is denoted by val_len == 0 when the function returns.
-void get_state(
+int get_state(
     const char* key, uint8_t* val, uint32_t max_val_len, uint32_t* val_len, shim_ctx_ptr_t ctx);
 // - look for composite keys, i.e., return the set of keys and values which match the
 //   provided composite (prefix) key comp_key
-void get_state_by_partial_composite_key(
+int get_state_by_partial_composite_key(
     const char* comp_key, std::map<std::string, std::string>& values, shim_ctx_ptr_t ctx);
 
 // TODO (possible extensions): possible extension of above
