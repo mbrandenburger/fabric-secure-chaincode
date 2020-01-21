@@ -51,18 +51,18 @@ int printf(const char* format, ...);
 
 #define LOG_DEBUG(fmt, ...) \
     if (DO_DEBUG)           \
-    printf(CYN "DEBUG " LOC_FMT TAG YEL fmt NRM "\n", ##__VA_ARGS__)
+    printf(CYN "DEBUG" TAG YEL fmt NRM "\n", ##__VA_ARGS__)
 
 #define LOG_INFO(fmt, ...) \
     if (DO_INFO)           \
-    printf(CYN "INFO " LOC_FMT TAG NRM fmt "\n", ##__VA_ARGS__)
+    printf(CYN "INFO" TAG NRM fmt "\n", ##__VA_ARGS__)
 
 #define LOG_WARNING(fmt, ...) \
     if (DO_WARNING)           \
-    printf(CYN "WARNING " LOC_FMT TAG RED fmt NRM "\n", ##__VA_ARGS__)
+    printf(CYN "WARNING" TAG RED fmt NRM "\n", ##__VA_ARGS__)
 
 #define LOG_ERROR(fmt, ...) \
     if (DO_ERROR)           \
-    printf(CYN "ERROR " LOC_FMT TAG RED fmt NRM "\n", ##__VA_ARGS__)
+    printf(CYN "ERROR" TAG RED fmt NRM "\n", ##__VA_ARGS__)
 
 #endif
