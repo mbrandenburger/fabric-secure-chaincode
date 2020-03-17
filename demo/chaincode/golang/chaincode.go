@@ -10,12 +10,14 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/hyperledger/fabric/common/flogging"
+
 	"github.com/hyperledger-labs/fabric-private-chaincode/utils"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric/protos/peer"
+	"github.com/hyperledger/fabric-chaincode-go/shim"
+	pb "github.com/hyperledger/fabric-protos-go/peer"
 )
 
-var logger = shim.NewLogger("MockAuction")
+var logger = flogging.MustGetLogger("MockAuction")
 
 type MockAuction struct {
 	dispatcher map[string]func(shim.ChaincodeStubInterface, []string) pb.Response
