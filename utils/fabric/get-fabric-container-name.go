@@ -20,7 +20,6 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/hyperledger/fabric/core/container/ccintf"
 	"github.com/hyperledger/fabric/core/container/dockercontroller"
 )
 
@@ -33,7 +32,7 @@ func main() {
 	flag.Parse()
 
 	vm := &dockercontroller.DockerVM{NetworkID: *netId, PeerID: *peerId}
-	ccid := ccintf.CCID{Name: *ccName, Version: *ccVersion}
+	ccid := *ccName + ":" + *ccVersion
 	name, _ := vm.GetVMNameForDocker(ccid)
 	fmt.Println(name)
 }
