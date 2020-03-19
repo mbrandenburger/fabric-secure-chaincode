@@ -24,7 +24,6 @@ import (
 
 var logger = flogging.MustGetLogger("tlcc")
 
-
 type TrustedLedgerCC struct {
 	enclave enclave.Stub
 	peer    *peer.Peer
