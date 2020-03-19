@@ -61,7 +61,7 @@ before_install:
   # Fabric
   - git clone --branch v$FABRIC_VERSION https://github.com/hyperledger/fabric.git $FABRIC_PATH
   - pushd $FABRIC_PATH
-  - git am $GOPATH/src/github.com/hyperledger-labs/fabric-private-chaincode/fabric/*.patch
+  # - git am $GOPATH/src/github.com/hyperledger-labs/fabric-private-chaincode/fabric/*.patch
   - GO_TAGS=pluginsenabled make peer orderer cryptogen configtxgen && popd
 
 script:
