@@ -32,6 +32,7 @@ func main() {
 	flag.Parse()
 
 	vm := &dockercontroller.DockerVM{NetworkID: *netId, PeerID: *peerId}
+	// chaincode id consists of name and version, see https://github.com/hyperledger/fabric/blob/c491d69962966db1f0231496ae6cab457d8a247d/core/scc/scc.go#L24
 	ccid := *ccName + ":" + *ccVersion
 	name, _ := vm.GetVMNameForDocker(ccid)
 	fmt.Println(name)
