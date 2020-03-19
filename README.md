@@ -254,7 +254,7 @@ Make sure that you have the following required dependencies installed:
 
 * [SSL](https://github.com/intel/intel-sgx-ssl)  for SGX SDK v2.4.1 (we recommend using OpenSSL 1.1.0j) 
 
-* Hyperledger [Fabric](https://github.com/hyperledger/fabric) v2.0.1
+* Hyperledger [Fabric](https://github.com/hyperledger/fabric/tree/v2.0.1) v2.0.1
 
 * Clang-format 6.x or higher
 
