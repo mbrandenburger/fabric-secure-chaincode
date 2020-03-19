@@ -6,12 +6,7 @@
 TOP = ..
 include $(TOP)/build.mk
 
-VSCC_SRC = vscc/ercc_validation_plugin.go vscc/ercc_validation_logic.go
-VSCC_OUT = ercc-vscc.so
-DECO_SRC = attestation/ias_credentials/decoration.go
-DECO_OUT = ercc-decorator.so
-
-build: ias-keys provider ercc vscc-plugin decorator-plugin
+build: ias-keys provider ercc
 
 .PHONY: .sgx_mode
 
@@ -51,12 +46,7 @@ $(GO_TARGETS): $(SGX_MODE_DEPENDENCY) $(GO_TEMPLATES)
 
 ercc:
 	$(GO) build
-
-vscc-plugin: $(VSCC_SRC)
-	$(GO) build -o $(VSCC_OUT) -buildmode=plugin $^
-
-decorator-plugin: $(DECO_SRC)
-	$(GO) build -o $(DECO_OUT) -buildmode=plugin $^
+	rm ercc # validating a successful build, ercc not meant to be run directly
 
 test: build
 	$(GO) test -v ./...
