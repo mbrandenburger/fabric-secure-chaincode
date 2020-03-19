@@ -106,8 +106,9 @@ func getChaincodeName(stub shim.ChaincodeStubInterface) (string, error) {
 	}
 
 	hdr, err := protoutil.UnmarshalHeader(prop.Header)
+	chdr, err := protoutil.UnmarshalChannelHeader(hdr.ChannelHeader)
 
-	chaincodeHdrExt, err := protoutil.UnmarshalChaincodeHeaderExtension(hdr)
+	chaincodeHdrExt, err := protoutil.UnmarshalChaincodeHeaderExtension(chdr.Extension)
 	if err != nil {
 		return "", errors.New("invalid header extension for type CHAINCODE")
 	}
