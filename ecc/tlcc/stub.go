@@ -13,8 +13,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/hyperledger/fabric/common/flogging"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb_utils "github.com/hyperledger/fabric/protos/utils"
 )
 
