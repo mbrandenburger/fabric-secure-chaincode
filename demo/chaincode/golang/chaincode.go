@@ -10,11 +10,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/hyperledger/fabric/common/flogging"
-
 	"github.com/hyperledger-labs/fabric-private-chaincode/utils"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
+	"github.com/hyperledger/fabric/common/flogging"
 )
 
 var logger = flogging.MustGetLogger("MockAuction")
