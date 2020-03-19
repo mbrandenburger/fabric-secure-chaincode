@@ -59,6 +59,7 @@ func main() {
 	flag.Parse()
 
 	if flagDebug {
+		// TODO find a way to set flogger log level to debug
 		//logger.SetLevel(shim.LogDebug)
 	}
 
