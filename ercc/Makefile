@@ -49,16 +49,15 @@ $(GO_TARGETS): $(SGX_MODE_DEPENDENCY) $(GO_TEMPLATES)
 	$(CC) -E -P $(IAS_GO_DEFINES) - < $@$(TEMPLATE_SUFFIX) > $@
 	gofmt -w $@ && goimports -w $@
 
-
 ercc:
 	$(GO) build
 	rm ercc # validating a successful build, ercc not meant to be run directly
 
 vscc-plugin: $(VSCC_SRC)
-    $(GO) build -o $(VSCC_OUT) -buildmode=plugin $^
+	$(GO) build -o $(VSCC_OUT) -buildmode=plugin $^
 
 decorator-plugin: $(DECO_SRC)
-    $(GO) build -o $(DECO_OUT) -buildmode=plugin $^
+	$(GO) build -o $(DECO_OUT) -buildmode=plugin $^
 
 test: build
 	$(GO) test -v ./...
