@@ -12,9 +12,12 @@ FPC_SDK_DEP_DIRS = protos common utils/fabric ecc_enclave ecc
 FPC_PEER_DEP_DIRS = protos common ercc fabric ecc_enclave ecc
 # FPC_PEER_DEP_DIRS has to include protos, ecc, ecc_enclave, common and ercc only if we run chaincode in external builder directly on host and not indirectly via docker
 FPC_PEER_CLI_WRAPPER_DEP_DIRS = utils/fabric
+DOCKER_DIR = docker
 
+.PHONY: license docker
 
-.PHONY: license
+docker:
+	$(MAKE) -C $(DOCKER_DIR) || exit
 
 build: godeps
 

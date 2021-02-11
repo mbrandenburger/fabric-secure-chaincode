@@ -141,7 +141,7 @@ Additional google documents provide details on FPC 1.0:
 - [`internal`](internal/): Shared Go code
 - [`protos`](protos/): Protobuf definitions
 - [`scripts`](scripts/): Scripts used in build process.
-- [`utils/docker`](utils/docker): Docker images and their build process.
+- [`utils/docker`](docker): Docker images and their build process.
 - [`utils/fabric`](utils/fabric): Various Fabric helpers.
 
 
@@ -278,7 +278,7 @@ A few notes:
 
 Once you have cloned the repository, to build the docker image execute the following:
 ```bash
-cd utils/docker; make run
+cd docker; make build run
 ```
 
 This will open a shell inside the FPC development container, with environment variables like GOPATH appropriately defined and all
@@ -287,10 +287,9 @@ dependencies like fabric built, ready to build and run FPC.
 Note that by default the dev container mounts your local cloned FPC project as a volume to `/project/src/github.com/hyperledger-labs/fabric-private-chaincode` within the docker container.
 This allows you to edit the content of the repository using your favorite editor in your system and the changes inside the docker container. Additionally, you are also not loosing changes inside the container when you reboot or the container gets stopped for other reasons.
 
-Optional: to do a clean build do the following *within* the container
+To do a clean build do the following *within* the container
 ```bash
-make clean
-make build
+make clean build
 ```
 Now you are ready to start development.  Go to the [Develop Your First Private Chaincode
 ](#your-first-private-chaincode) section.
