@@ -16,14 +16,14 @@ ercc-container:
 	make -C ${FPC_PATH}/ercc all docker
 
 ecc-container:
-	if [ "${SGX_MODE}" = "HW" ]; then \
+	@if [ "${SGX_MODE}" = "HW" ]; then \
 		export HW_EXTENSION="-hw" ; \
 	fi && \
 	make -C ${FPC_PATH}/ecc DOCKER_IMAGE=fpc/fpc-${TEST_EXAMPLE}$${HW_EXTENSION} DOCKER_ENCLAVE_SO_PATH=${FPC_PATH}/examples/${TEST_EXAMPLE}/_build/lib all docker
 
 
 ercc-ecc-start:
-	if [ "${SGX_MODE}" = "HW" ]; then \
+	@if [ "${SGX_MODE}" = "HW" ]; then \
 		export HW_EXTENSION="-hw" \
 		    AESMD_PATH="/var/run/aesmd" \
 		    SGX_DEVICE_PATH=$$(if [ -e "/dev/isgx" ]; then echo "/dev/isgx"; elif [ -e "/dev/sgx" ]; then echo "/dev/sgx"; else echo "none"; fi) && \

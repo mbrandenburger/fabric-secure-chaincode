@@ -33,8 +33,8 @@ ecc: ecc_dependencies
 	$(GO) build $(GOTAGS) -o ecc main.go
 
 ecc_dependencies:
-	# hard to list explicitly, so just leave empty target,
-	# which forces ecc to always be built
+# hard to list explicitly, so just leave empty target,
+# which forces ecc to always be built
 
 test: build
 	$(GO) test $(GOTAGS) -v ./...
@@ -64,11 +64,11 @@ docker-boilerplate-ecc: ecc
 	$(DOCKER) tag $(DOCKER_BOILERPLATE_ECC_IMAGE) $(DOCKER_BOILERPLATE_ECC_IMAGE):${FPC_VERSION}
 
 docker-fpc-app: docker-boilerplate-ecc
-	if [ -z "$(DOCKER_IMAGE)" ]; then\
+	@if [ -z "$(DOCKER_IMAGE)" ]; then\
 		echo "\033[0;31mERROR: cannot override $(CC_NAME) docker image - not found\033[0m";\
 		exit 1;\
 	fi
-	echo "\033[1;33mWARNING: overriding $(DOCKER_IMAGE) docker image\033[0m"
+	@echo "\033[1;33mWARNING: overriding $(DOCKER_IMAGE) docker image\033[0m"
 	$(DOCKER) build $(DOCKER_BUILD_OPTS) -t $(DOCKER_IMAGE) -f Dockerfile.fpc-app \
                 --build-arg HW_EXTENSION=$(HW_EXTENSION)\
  		$(DOCKER_ENCLAVE_SO_PATH)
@@ -90,17 +90,17 @@ docker-run:
 		chaincode
 
 docker-stop:
-	-if [ ! -z "$(DOCKER_CONTAINER_ID)" ]; then docker stop $(DOCKER_CONTAINER_ID); fi
-	-if [ ! -z "$(DOCKER_CONTAINER_ID)" ]; then docker rm $(DOCKER_CONTAINER_ID); fi
+	@if [ ! -z "$(DOCKER_CONTAINER_ID)" ]; then $(DOCKER) stop $(DOCKER_CONTAINER_ID); fi
+	@if [ ! -z "$(DOCKER_CONTAINER_ID)" ]; then $(DOCKER) rm $(DOCKER_CONTAINER_ID); fi
 
 docker-clean: docker-stop
-	-if [ ! -z "$(DOCKER_IMAGE)" ]; then docker rmi -f $(DOCKER_IMAGE); fi
-	for tag in \
+	@if [ ! -z "$(DOCKER_IMAGE)" ]; then $(DOCKER) rmi -f $(DOCKER_IMAGE); fi
+	@for tag in \
 	    ${FPC_VERSION} \
 	    latest \
 	; do \
 	    if [ ! -z "$$(docker images -q ${DOCKER_BOILERPLATE_ECC_IMAGE}:$${tag})" ]; then \
-		docker rmi $(DOCKER_BOILERPLATE_ECC_IMAGE):$${tag}; \
+		$(DOCKER) rmi $(DOCKER_BOILERPLATE_ECC_IMAGE):$${tag}; \
 	    fi \
 	done
 

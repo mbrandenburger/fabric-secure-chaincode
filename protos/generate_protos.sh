@@ -59,7 +59,7 @@ for i in "${arr[@]}"
 do
     # filter fabric protos
     for protos in $(find "$FABRIC_PROTOS_DIR" -name '*.proto' -path "*/$i/*" -exec dirname {} \; | sort | uniq) ; do
-        $PROTOC_CMD "$PROTOC_OPTS" --proto_path="${PROTOS_DIR}/protos/google" --proto_path="$BUILD_DIR" --proto_path="$FABRIC_PROTOS_DIR" "--nanopb_out=-f  ${PROTOS_DIR}/fabric.options:$FABRIC_BUILD_DIR" "$protos"/*.proto
+        $PROTOC_CMD "$PROTOC_OPTS" --proto_path="${PROTOS_DIR}/google" --proto_path="$BUILD_DIR" --proto_path="$FABRIC_PROTOS_DIR" "--nanopb_out=-f  ${PROTOS_DIR}/fabric.options:$FABRIC_BUILD_DIR" "$protos"/*.proto
     done
 done
 

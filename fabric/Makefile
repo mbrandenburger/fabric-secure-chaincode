@@ -16,7 +16,7 @@ build: native
 patch: $(FABRIC_PATCHED)
 
 $(FABRIC_PATCHED): patches/*.patch $(FABRIC_PATH)/.git
-        # Note: .git dependency hopefully captures significant changes in fabric dir requiring repatch (and rebuild)
+# Note: .git dependency hopefully captures significant changes in fabric dir requiring repatch (and rebuild)
 	@echo "Patching Fabric ..."; \
 	if [ -f $(FABRIC_PATCHED) ]; then \
 		echo "Need to re-apply patch, so try to undo patches first"; \
@@ -33,7 +33,7 @@ $(FABRIC_PATCHED): patches/*.patch $(FABRIC_PATH)/.git
 	$(GO) mod vendor
 
 clean-patch:
-	# Note: for below to work with exit 0, this has to be a single shell command!
+# Note: for below to work with exit 0, this has to be a single shell command!
 	@echo "Cleaning Fabric patches ..."; \
 	echo "(Warning: as go.{mod,sum} and  vendor/ are auto-updated, we also (blindly) auto-reset them to committed version!)"; \
         (cd $(FABRIC_PATH) && git checkout -- go.mod go.sum && git checkout HEAD -- vendor && git clean -fd vendor) || exit 1; \

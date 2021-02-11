@@ -19,7 +19,6 @@ GO := $(GO_CMD) $(GOFLAGS)
 all: build test checks # keep checks last as license test is brittle ...
 
 .PHONY: test
-test: build
 
 .PHONY: build
 .PHONY: checks

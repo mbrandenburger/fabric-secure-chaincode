@@ -15,7 +15,5 @@ $(GO_CMDS): FORCE
 
 FORCE:
 
-test: build
-
 clean: 
 	$(RM) $(GO_CMDS)
