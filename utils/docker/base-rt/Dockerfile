@@ -49,6 +49,7 @@ RUN apt-get update -q \
     gnupg2 \
     unzip \
     wget \
+    jq \
     ${APT_ADD_PKGS} \
   && apt-get -y -q upgrade \
   && apt-get clean \

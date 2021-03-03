@@ -36,3 +36,5 @@ copy ecc/${CC_NAME} ${CC_PATH}/chaincode
 copy ecc_enclave/_build/lib/libsgxcc.so ${CC_LIB_PATH}/
 
 WORKDIR ${CC_PATH}
+EXPOSE 9999
+CMD ["chaincode"]

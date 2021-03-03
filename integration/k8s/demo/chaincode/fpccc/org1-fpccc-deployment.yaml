@@ -1,0 +1,36 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: fpccc-peer0-org1
+  namespace: hyperledger
+  labels:
+    app: fpccc-peer0-org1
+spec:
+  selector:
+    matchLabels:
+      app: fpccc-peer0-org1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: fpccc-peer0-org1
+    spec:
+      containers:
+        - image: fpc/fpccc
+          name: fpccc-peer0-org1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: CHAINCODE_PKG_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: chaincode-config
+                  key: fpccc-peer0-org1
+            - name: CHAINCODE_SERVER_ADDRESS
+              value: "0.0.0.0:9999"
+          ports:
+            - containerPort: 9999
