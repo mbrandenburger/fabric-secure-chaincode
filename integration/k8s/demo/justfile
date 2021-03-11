@@ -18,7 +18,10 @@ down:
     kubectl delete --all all --namespace=hyperledger
     kubectl delete ns hyperledger
 
-clean minikube:
+clean:
+    rm -rf channel-artifacts crypto-config packages
+
+clean-minikube:
     # Note that orderers maintain some persistent storage which allows them to reboot.
     # If you generate new crypto material and genesis block, please perform some cleanup first.
     minikube ssh -- sudo rm -rf /tmp/storage
