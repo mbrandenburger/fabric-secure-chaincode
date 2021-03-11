@@ -4,12 +4,12 @@ Many steps of this tutorial can also be invoked by using `just`. See official [i
 
 ## TODOS
 
-- get this network running with minikube
-  [x] sim mode
-  [] hw
-- run this on a k8s cluster
-  [x] minikube
-  [] real cluster
+- Get this network running with k8s
+  -[x] sim mode
+  -[ ] hw
+- Run this on a k8s cluster
+  -[x] minikube
+  -[ ] real cluster
 
 ## Prepare FPC deployment components
 
