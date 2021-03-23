@@ -1,3 +1,9 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package main
 
 import (
@@ -56,14 +62,14 @@ func upload(c *gin.Context) {
 	// encrypt with new random key
 	sk := pkg.NewEncryptionKey()
 	encryptedData := pkg.Encrypt(req.Data, sk)
-	fmt.Printf("encrypt data: %s\n")
+	fmt.Printf("Encrypting data...\n")
 
 	// upload encrypted data
 	handle := storage.Upload(encryptedData)
-	fmt.Printf("stored under key: %s\n", handle)
+	fmt.Printf("Data stored under key: %s\n", handle)
 
 	// create metadata
-	dat := &pkg.PatientData{
+	dat := &pkg.ConsentData{
 		Metadata: &pkg.Metadata{
 			Name:   req.DataName,
 			Domain: req.Domain,
@@ -78,7 +84,7 @@ func upload(c *gin.Context) {
 		},
 	}
 
-	// register patient data at FPC IRB
+	// register consent at FPC IRB
 	fpc.RegisterConsent(dat)
 
 	// return answer

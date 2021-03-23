@@ -1,3 +1,9 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package storage
 
 import (
@@ -26,7 +32,7 @@ func getEnv(key, defaultValue string) string {
 func newRedisClient() *redis.Client {
 	var (
 		host     = getEnv("REDIS_HOST", "localhost")
-		port     = string(getEnv("REDIS_PORT", "62482"))
+		port     = getEnv("REDIS_PORT", "6379")
 		password = getEnv("REDIS_PASSWORD", "")
 	)
 

@@ -4,7 +4,7 @@
       max-width="450">
     <v-card-title class="headline font-weight-regular purple white--text">
       <v-icon class="mr-2" large color="white">mdi-rocket-launch</v-icon>
-      <span class="headline">Waiting for approvals ...</span>
+      <span class="headline">Waiting for Approvals</span>
     </v-card-title>
     <v-card-text>
       <v-container style="height: 400px;">

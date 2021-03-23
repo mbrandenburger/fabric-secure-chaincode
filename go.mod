@@ -21,7 +21,8 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis/v8 v8.7.1
-	github.com/golang/protobuf v1.4.2
+	github.com/go-resty/resty/v2 v2.5.0 // indirect
+	github.com/golang/protobuf v1.4.3
 	github.com/hyperledger/fabric v1.4.0-rc1.0.20201118191903-ec81f3e74fa1
 	github.com/hyperledger/fabric-chaincode-go v0.0.0-20201119163726-f8ef75b17719
 	github.com/hyperledger/fabric-contract-api-go v1.1.1
@@ -37,4 +38,7 @@ require (
 	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v2 v2.3.0
+	k8s.io/api v0.20.5
+	k8s.io/apimachinery v0.20.5
+	k8s.io/client-go v0.20.5
 )

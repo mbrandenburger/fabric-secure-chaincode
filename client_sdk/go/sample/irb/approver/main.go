@@ -1,3 +1,9 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package main
 
 import (
@@ -34,7 +40,8 @@ func startServer() {
 
 func approve(c *gin.Context) {
 
-	// TODO
+	// approve proposal via FPC
+	// fpc.Approve(...)
 
 	// return answer
 	c.IndentedJSON(http.StatusOK, "approved")

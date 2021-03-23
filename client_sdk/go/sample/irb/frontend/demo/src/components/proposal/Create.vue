@@ -4,7 +4,7 @@
       max-width="950">
     <v-card-title class="headline font-weight-regular purple white--text">
       <v-icon class="mr-2" large color="white">mdi-rocket-launch</v-icon>
-      <span class="headline">Create Experiment Proposal</span>
+      <span class="headline">New Experiment</span>
     </v-card-title>
     <v-card-text>
       <Proposal :proposal="newProposal"/>

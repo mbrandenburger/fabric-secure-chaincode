@@ -9,7 +9,7 @@
           step="1"
           editable
       >
-        Create proposal
+        Create Proposal
       </v-stepper-step>
       <v-divider></v-divider>
 
@@ -18,7 +18,7 @@
           step="2"
           editable
       >
-        Wait for approvals
+        Wait for Approvals
       </v-stepper-step>
       <v-divider></v-divider>
 
@@ -27,12 +27,7 @@
           step="3"
           editable
       >
-        Spawn experiment instance
-      </v-stepper-step>
-      <v-divider></v-divider>
-
-      <v-stepper-step step="4" editable>
-        Provision and execute
+        Run Experiment
       </v-stepper-step>
 
     </v-stepper-header>
@@ -54,17 +49,9 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <SpawnExperiment
+        <RunExperiment
             class="mb-2"
             :watchProposalWithId="currentProposalId"
-            v-on:next="onNextStep"
-        />
-      </v-stepper-content>
-
-      <v-stepper-content step="4">
-        <ExecuteExperiment
-            :watchProposalWithId="currentProposalId"
-            class="mb-2"
         />
       </v-stepper-content>
 
@@ -76,9 +63,7 @@
 // @ is an alias to /src
 import ProposalCreate from '@/components/proposal/Create.vue';
 import WaitingForApprovals from '@/components/experiment/Waiting.vue';
-import SpawnExperiment from '@/components/experiment/Spawn.vue';
-import ExecuteExperiment from '@/components/experiment/Execute.vue';
-
+import RunExperiment from '@/components/experiment/Run.vue';
 
 import {mapGetters} from 'vuex';
 
@@ -87,8 +72,7 @@ export default {
   components: {
     ProposalCreate,
     WaitingForApprovals,
-    SpawnExperiment,
-    ExecuteExperiment,
+    RunExperiment,
   },
   data: () => ({
     currentProposalId: '1'

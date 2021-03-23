@@ -1,8 +1,14 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package pkg
 
 import "encoding/json"
 
-type PatientData struct {
+type ConsentData struct {
 	Metadata  *Metadata
 	Consent   *Consent
 	Handler   string
@@ -23,18 +29,32 @@ type SecretKey struct {
 	KeyAlg      string
 }
 
-func (pd *PatientData) ToJson() ([]byte, error) {
+func (pd *ConsentData) ToJson() ([]byte, error) {
 	return json.MarshalIndent(pd, "", "    ")
 }
 
-func FromJson(data []byte) (*PatientData, error) {
-	patientData := &PatientData{}
-	err := json.Unmarshal(data, patientData)
+type EvaluationPack struct {
+	Items []*ConsentData
+}
+
+func EvaluationPackFromJson(data []byte) (*EvaluationPack, error) {
+	pack := &EvaluationPack{}
+	err := json.Unmarshal(data, pack)
 	if err != nil {
 		return nil, err
 	}
 
-	return patientData, nil
+	return pack, nil
+}
+
+func ConsentDataFromJson(data []byte) (*ConsentData, error) {
+	consent := &ConsentData{}
+	err := json.Unmarshal(data, consent)
+	if err != nil {
+		return nil, err
+	}
+
+	return consent, nil
 }
 
 type Experiment struct {

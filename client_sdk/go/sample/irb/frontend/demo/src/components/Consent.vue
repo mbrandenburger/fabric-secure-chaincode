@@ -83,7 +83,7 @@ export default {
     selectedDataDomain: '',
     dataDomainItems: [
       'Health',
-      'Animal',
+      'Financial',
     ],
     confirmed: false,
     previewImage: null,

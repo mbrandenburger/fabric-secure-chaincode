@@ -1,3 +1,9 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package fpc
 
 import (
@@ -7,34 +13,36 @@ import (
 	"github.com/hyperledger-labs/fabric-private-chaincode/client_sdk/go/sample/irb/pkg/storage"
 )
 
-const dummyPatientId = "patientXYZ"
+const dummyItemtId = "patientXYZ"
 
-func RegisterConsent(data *pkg.PatientData) {
+func RegisterConsent(data *pkg.ConsentData) {
 
 	jsonData, err := data.ToJson()
 	if err != nil {
 		panic(err)
 	}
 
-	patientId := dummyPatientId
+	patientId := dummyItemtId
 
+	fmt.Printf("Registering consent with id: %s\n", patientId)
 	storage.Store(patientId, string(jsonData))
-	fmt.Printf("patient data stored: %s\n", patientId)
 }
 
-func FetchEvaluationPack() []*pkg.PatientData {
+func FetchEvaluationPack() *pkg.EvaluationPack {
 
 	// for now we fetch just a single item
 
-	patientId := dummyPatientId
+	itemId := dummyItemtId
 
-	data := storage.Load(patientId)
-	patientData, err := pkg.FromJson([]byte(data))
+	data := storage.Load(itemId)
+	item, err := pkg.ConsentDataFromJson([]byte(data))
 	if err != nil {
 		panic(err)
 	}
 
-	return []*pkg.PatientData{patientData}
+	return &pkg.EvaluationPack{
+		Items: []*pkg.ConsentData{item},
+	}
 }
 
 func ProposeExperiment(desc *pkg.Experiment) {

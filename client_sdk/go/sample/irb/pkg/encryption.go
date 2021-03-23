@@ -1,3 +1,9 @@
+/*
+Copyright IBM Corp. All Rights Reserved.
+
+SPDX-License-Identifier: Apache-2.0
+*/
+
 package pkg
 
 import (
@@ -11,8 +17,6 @@ const NonceLength = 12
 const KeyLength = 32
 
 func NewEncryptionKey() []byte {
-	// TODO
-	//key, _ := hex.DecodeString("6368616e676520746869732070617373776f726420746f206120736563726574")
 	return generateRandomBytes(KeyLength)
 }
 
