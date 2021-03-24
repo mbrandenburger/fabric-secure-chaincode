@@ -88,6 +88,8 @@ func launch(c *gin.Context) {
 	fmt.Printf("Attestation: %s\n", a)
 
 	// TODO do some attestation evidence transformation here
+	// Take the quote and send it to IAS
+	// Return attestation evidence from IAS to client
 	fmt.Printf("Perform attestation evidence transformation\n")
 
 	// return answer

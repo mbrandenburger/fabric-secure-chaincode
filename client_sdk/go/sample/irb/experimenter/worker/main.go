@@ -89,10 +89,29 @@ func attestation(c *gin.Context) {
 	}
 
 	// TODO call graphene low-level attestation API
+	// https://graphene.readthedocs.io/en/latest/attestation.html#low-level-dev-attestation-interface
 
+	// hash the public key
+	//hash := sha256.Sum256(publicKeyPem)
+
+	// write the hash to /dev/attestation/user_report_data
+	//err := ioutil.WriteFile("/dev/attestation/user_report_data", hash[:], 0644)
+	//if err != nil {
+	//	c.IndentedJSON(http.StatusInternalServerError, err.Error())
+	//	return
+	//}
+	// read the quote from /dev/attestation/quote
+	//quote, err := ioutil.ReadFile("/dev/attestation/quote")
+	//if err != nil {
+	//	c.IndentedJSON(http.StatusInternalServerError, err.Error())
+	//	return
+	//}
+	//quoteBase64 := base64.StdEncoding.EncodeToString(quote)
+
+	quoteBase64 := "some attestation proof"
 	a := attestation{
 		PublicKey:   string(publicKeyPem),
-		Attestation: "Some proof",
+		Attestation: quoteBase64,
 	}
 
 	// return answer
