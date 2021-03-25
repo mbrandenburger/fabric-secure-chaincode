@@ -125,6 +125,7 @@ type ExecutionRequest struct {
 
 func execute(c *gin.Context) {
 
+	fmt.Println("run execute")
 	var req ExecutionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		fmt.Printf("error: %v\n", err)
@@ -166,7 +167,10 @@ func execute(c *gin.Context) {
 	}
 
 	// trigger python script
-	cmd := exec.Command("python", "pytorchexample.py")
+	pythonFile := "pytorchexample.py"
+	fmt.Printf("Executing %s ...\n", pythonFile)
+
+	cmd := exec.Command("python", pythonFile)
 	out, err := cmd.Output()
 	fmt.Println(string(out))
 
@@ -181,6 +185,9 @@ func execute(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
+	fmt.Printf("Result: %s\n", content)
+
+	// TODO sign result before returning
 
 	// return answer
 	c.IndentedJSON(http.StatusOK, string(content))
