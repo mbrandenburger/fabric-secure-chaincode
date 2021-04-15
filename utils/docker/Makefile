@@ -12,14 +12,11 @@ HW_EXTENSION=$(shell if [ "${SGX_MODE}" = "HW" ]; then echo "-hw"; fi)
 # Names and namespaces
 # ------------------
 FPC_DOCKER_NAMESPACE := hyperledger/fabric-private-chaincode
-FPC_DOCKER_CC_BUILDER_NAME = $(FPC_DOCKER_NAMESPACE)-cc-builder$(HW_EXTENSION)
 FPC_DOCKER_DEV_NAME = $(FPC_DOCKER_NAMESPACE)-dev
 FPC_DOCKER_CCENV_NAME = $(FPC_DOCKER_NAMESPACE)-ccenv
 FPC_DOCKER_BASE_RT_NAME = $(FPC_DOCKER_NAMESPACE)-base-rt
 FPC_DOCKER_BASE_DEV_NAME = $(FPC_DOCKER_NAMESPACE)-base-dev
 
-FPC_DOCKER_PEER_NAMESPACE := hyperledger/fabric-peer-fpc
-FPC_DOCKER_PEER_NAME = $(FPC_DOCKER_PEER_NAMESPACE)$(HW_EXTENSION)
 
 DOCKER_DEV_CONTAINER_NAME = fpc-development-${FPC_VERSION}
 
@@ -120,11 +117,11 @@ DOCKER_DEV_OPTIONAL_CMD=
 # ------------------------------
 .PHONY: base-rt base-dev ccenv dev peer cc-builder
 
-build: ccenv cc-builder peer
+build: ccenv
 # note: we do _not_ include dev here as this is not needed in integration tests and 
 # a rebuild could cause trouble for a dev container user ..
 
-run: dev
+run:
 	# Cleanup existing but non-running (note absence of --force in rm!) old dev containers
 	dev_container_id=$$(docker ps -a | grep ${DOCKER_DEV_CONTAINER_NAME} | awk '{ print $$1 }'); \
 	   [ -z  "$${dev_container_id}" ] || ${DOCKER} rm "$${dev_container_id}"
@@ -147,8 +144,6 @@ clobber:
 	    latest \
 	; do \
 	    for img in \
-	        ${FPC_DOCKER_PEER_NAME} \
-		$(FPC_DOCKER_CC_BUILDER_NAME) \
 		$(FPC_DOCKER_DEV_NAME) \
 		$(FPC_DOCKER_CCENV_NAME) \
 		$(FPC_DOCKER_BASE_RT_NAME) \
@@ -191,42 +186,16 @@ ccenv: base-rt
 # will also cause a rebuild. Given the filtering this mostly applies
 # only to changes in git state (e.g., git pull, git add, git commit ...).
 # The images should also be in a way which minimizes what will be rebuilt
-# in that context. Additionally, the building should happen only as last
-# step before the demo, so any code-induced build failure should happen
-# before any docker rebuild happens.
-peer: base-dev
-	(cd ${TOP} &&\
-         $(DOCKER) build $(DOCKER_BUILD_OPTS) -t ${FPC_DOCKER_PEER_NAME}\
-         $(DOCKER_DEV_BUILD_OPTS)\
-	 --target peer\
-         -f ./utils/docker/dev_peer_cc-builder/Dockerfile\
-         --build-arg FPC_REPO_URL=file:///tmp/cloned-local-fpc-git-repo\
-         --build-arg FPC_REPO_BRANCH_TAG_OR_COMMIT=$$(git rev-parse HEAD)\
-         --build-arg SGX_MODE=${SGX_MODE}\
-         . )
-	$(DOCKER) tag $(FPC_DOCKER_PEER_NAME) $(FPC_DOCKER_PEER_NAME):${FPC_VERSION}
+# in that context. 
 
 dev: base-dev
 	(cd ${TOP} &&\
          $(DOCKER) build $(DOCKER_BUILD_OPTS) -t $(FPC_DOCKER_DEV_NAME)\
          $(DOCKER_DEV_BUILD_OPTS)\
-         -f ./utils/docker/dev_peer_cc-builder/Dockerfile\
+         -f ./utils/docker/dev/Dockerfile\
 	 --target dev \
          --build-arg FPC_REPO_URL=file:///tmp/cloned-local-fpc-git-repo\
          --build-arg FPC_REPO_BRANCH_TAG_OR_COMMIT=$$(git rev-parse HEAD)\
          --build-arg SGX_MODE=${SGX_MODE}\
          . )
 	$(DOCKER) tag $(FPC_DOCKER_DEV_NAME) $(FPC_DOCKER_DEV_NAME):${FPC_VERSION}
-
-cc-builder: base-dev
-	(cd ${TOP} &&\
-         $(DOCKER) build $(DOCKER_BUILD_OPTS) -t $(FPC_DOCKER_CC_BUILDER_NAME)\
-         $(DOCKER_DEV_BUILD_OPTS)\
-         -f ./utils/docker/dev_peer_cc-builder/Dockerfile\
-	 --target cc-builder \
-         --build-arg FPC_REPO_URL=file:///tmp/cloned-local-fpc-git-repo\
-         --build-arg FPC_REPO_BRANCH_TAG_OR_COMMIT=$$(git rev-parse HEAD)\
-         --build-arg SGX_MODE=${SGX_MODE}\
-         . )
-	$(DOCKER) tag $(FPC_DOCKER_CC_BUILDER_NAME) $(FPC_DOCKER_CC_BUILDER_NAME):${FPC_VERSION}
-

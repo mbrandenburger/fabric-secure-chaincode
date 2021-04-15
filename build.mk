@@ -15,14 +15,13 @@ endif
 GO := $(GO_CMD) $(GOFLAGS)
 
 .PHONY: all
-all: build test ci_report checks # keep checks last as license test is brittle ...
-
-.PHONY: test
-test: build
+all: build test integration-test ci_report checks # keep checks last as license test is brittle ...
 
 .PHONY: ci_report
 
 .PHONY: build
+.PHONY: test
+.PHONY: integration-test
 .PHONY: checks
 .PHONY: clean
 

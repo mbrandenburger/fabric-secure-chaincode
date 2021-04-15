@@ -26,6 +26,7 @@ require (
 	github.com/hyperledger/fabric-samples/chaincode/marbles02/go v0.0.0-20201218135726-377ccb0b59d5 // indirect
 	github.com/hyperledger/fabric-sdk-go v1.0.0-rc1
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.3.0
+	github.com/mikefarah/yq/v3 v3.0.0-20201202084205-8846255d1c37 // indirect
 	github.com/onsi/ginkgo v1.12.1
 	github.com/onsi/gomega v1.10.3
 	github.com/pkg/errors v0.9.1

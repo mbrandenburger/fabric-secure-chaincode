@@ -11,8 +11,9 @@
 
 [ -d "${FPC_PATH}" ] || (echo "FPC_PATH not properly defined in '${FPC_PATH}'"; exit 1; )
 
-: ${FABRIC_PATH:="${FPC_PATH}/../../hyperledger/fabric/"}
-: ${FABRIC_BIN_DIR:="${FABRIC_PATH}/build/bin"}
+# : ${FABRIC_PATH:="${FPC_PATH}/../../hyperledger/fabric/"}
+# : ${FABRIC_BIN_DIR:="${FABRIC_PATH}/build/bin"}
+: ${FABRIC_BIN_DIR:="${FPC_PATH}/fabric/_internal/bin"}
 : ${FABRIC_UTIL_BIN_DIR:="${FPC_PATH}/utils/fabric"}
 
 FABRIC_SCRIPTDIR="${FPC_PATH}/fabric/bin/"
@@ -135,8 +136,7 @@ ledger_init() {
     kill -0 ${ORDERER_PID} || die "Orderer quit too quickly: (for log see ${ORDERER_LOG_OUT} & ${ORDERER_LOG_ERR})"
 
     # 3. start peer
-    LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"$LD_LIBRARY_PATH:"}${FPC_PATH}/tlcc/enclave/lib \
-		   ${PEER_CMD} node start 1>${PEER_LOG_OUT} 2>${PEER_LOG_ERR} &
+    ${PEER_CMD} node start 1>${PEER_LOG_OUT} 2>${PEER_LOG_ERR} &
     export PEER_PID=$!
     echo "${PEER_PID}" > ${PEER_PID_FILE}
     sleep 1

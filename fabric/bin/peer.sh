@@ -30,8 +30,6 @@ METADATA_FILE="metadata.json"
 . ${FABRIC_SCRIPTDIR}/lib/common_utils.sh
 . ${FABRIC_SCRIPTDIR}/lib/common_ledger.sh
 
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+"${LD_LIBRARY_PATH}:"}${FPC_PATH}/tlcc/enclave/lib
-
 
 # Lifecycle Chaincode command wrappers
 #--------------------------------------------

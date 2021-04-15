@@ -16,6 +16,7 @@ $(GO_CMDS): FORCE
 FORCE:
 
 test: build
+	# TODO trigger tests
 
 clean: 
 	$(RM) $(GO_CMDS)

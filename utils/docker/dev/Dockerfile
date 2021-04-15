@@ -86,84 +86,6 @@ RUN git \
 RUN cd ${FPC_PATH} \
  && make godeps
 
-
-# peer builder container (Ephemeral)
-#------------------------------------
-FROM common as peer-builder
-
-# import global vars
-ARG SGX_MODE
-ENV SGX_MODE=${SGX_MODE}
-
-# Build FPC peer
-RUN cd ${FPC_PATH} \
- && make fpc-peer \
- && make fpc-peer-cli
-
-
-# peer Container
-#------------------------
-# Note we don't need all the build support for that,
-# so just start from base and copy the necessary built binaries/scripts
-FROM hyperledger/fabric-private-chaincode-base-rt:${FPC_VERSION} as peer
-
-# import global vars
-ARG FABRIC_REL_PATH
-ARG FPC_REL_PATH
-ARG SGX_MODE
-
-# local vars
-# note these envs are _not_ inhereted from above as we start from base-rt !
-ARG FABRIC_PATH=${GOPATH}/${FABRIC_REL_PATH}
-ARG FPC_PATH=${GOPATH}/${FPC_REL_PATH}
-ARG FABRIC_BIN_DIR=${FABRIC_PATH}/build/bin
-ARG FPC_CMDS=${FPC_PATH}/fabric/bin
-
-ENV FABRIC_PATH=${FABRIC_PATH}
-ENV FABRIC_BIN_DIR=${FABRIC_BIN_DIR}
-ENV FPC_PATH=${FPC_PATH}
-ENV FPC_CMDS=${FPC_CMDS}
-ENV SGX_MODE=${SGX_MODE}
-
-RUN apt-get update \
-  && apt-get install -y -q \
-    docker.io \
-    jq \
-    ${APT_ADD_PKGS}
-
-
-# components we need
-# - peer cli wrapper
-COPY --from=peer-builder ${FPC_CMDS} ${FPC_CMDS}
-# - fabric binariers
-COPY --from=peer-builder ${FABRIC_BIN_DIR} ${FABRIC_BIN_DIR}
-# - (sgx) config
-COPY --from=peer-builder ${FPC_PATH}/config ${FPC_PATH}/config
-# - ercc binary
-COPY --from=peer-builder ${FPC_PATH}/ercc/ercc ${FPC_PATH}/ercc/ercc
-# - external builders itself ..
-COPY --from=peer-builder ${FPC_PATH}/fabric/externalBuilder/chaincode ${FPC_PATH}/fabric/externalBuilder/chaincode
-# - and for host-based run also ecc and libs
-COPY --from=peer-builder ${FPC_PATH}/ecc/ecc ${FPC_PATH}/ecc/ecc
-COPY --from=peer-builder ${FPC_PATH}/ecc_enclave/_build/lib/libsgxcc.so ${FPC_PATH}/ecc_enclave/_build/lib/libsgxcc.so
-
-CMD [${FPC_CMDS}/peer.sh node start]
-
-
-# cc-builder Container
-#------------------------
-FROM common as cc-builder
-
-# import global vars
-ARG SGX_MODE
-ENV SGX_MODE=${SGX_MODE}
-
-WORKDIR ${FPC_PATH}
-
-RUN make fpc-sdk
-
-
-
 # Dev Container
 #------------------------
 FROM common as dev
@@ -176,9 +98,6 @@ ARG APT_ADD_PKGS
 ENV SGX_MODE=${SGX_MODE}
 
 RUN apt-get install -y -q \
-	psmisc \
-	bc \
-	docker-compose\
 	${APT_ADD_PKGS}
 
 RUN GO111MODULE=on \
