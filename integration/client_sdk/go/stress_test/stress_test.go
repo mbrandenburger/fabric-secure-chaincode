@@ -8,6 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 package stress_test_test
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
@@ -58,13 +59,8 @@ var _ = Describe("Stress tests", func() {
 				for _, size := range sizes {
 					fmt.Printf("Size = %d\n", size)
 
-					payload := make([]byte, size)
-					n, err := rand.Read(payload)
-					Expect(err).ShouldNot(HaveOccurred())
-					Expect(n).Should(Equal(size))
-
 					key := "some-key"
-					value := base64.StdEncoding.EncodeToString(payload)
+					value := base64.StdEncoding.EncodeToString(getRandomBytes(size))
 
 					res, err := echoContract.SubmitTransaction("put_state", key, value)
 					Expect(err).ShouldNot(HaveOccurred())
@@ -78,5 +74,40 @@ var _ = Describe("Stress tests", func() {
 		})
 	})
 
+	Context("Issue #551", func() {
+
+		customStringEncoding := func(x []byte) string {
+			var buffer bytes.Buffer
+			buffer.WriteRune('{')
+			for _, r := range x {
+				buffer.WriteRune(rune(r))
+			}
+			buffer.WriteRune('}')
+			return buffer.String()
+		}
+
+		When("submitting bytes with custom string encoding", func() {
+			It("should not crash", func() {
+				for i := 0; i <= 50; i++ {
+					size := 32
+					x, y := getRandomBytes(size), getRandomBytes(size)
+					args := []string{customStringEncoding(x), customStringEncoding(y)}
+
+					res, err := echoContract.SubmitTransaction("put_state", args...)
+					Expect(err).ShouldNot(HaveOccurred())
+					Expect(res).Should(Equal([]byte("OK")))
+				}
+			})
+		})
+	})
+
 	// TODO more stress tests added here
 })
+
+func getRandomBytes(size int) []byte {
+	payload := make([]byte, size)
+	n, err := rand.Read(payload)
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(n).Should(Equal(size))
+	return payload
+}
