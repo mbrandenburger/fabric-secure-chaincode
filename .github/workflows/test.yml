@@ -39,4 +39,3 @@ jobs:
             # we pass DOCKER_BUILD_OPTS, similar to DOCKER_QUITE_BUILD and DOCKER_BUILDKIT, to both 'make' invocations as 
             # they are required when building the containers as part of 'make run' and when building inside the container (as part of make all)
             # but make run does not automatically propagate environment variables to the container.
-
